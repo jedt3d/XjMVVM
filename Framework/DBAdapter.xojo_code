@@ -34,6 +34,17 @@ Protected Module DBAdapter
 		  "username TEXT NOT NULL UNIQUE, " + _
 		  "password_hash TEXT NOT NULL, " + _
 		  "created_at TEXT DEFAULT (datetime('now')))")
+		  db.ExecuteSQL("CREATE TABLE IF NOT EXISTS customers (" + _
+		  "id INTEGER PRIMARY KEY AUTOINCREMENT, " + _
+		  "first_name TEXT NOT NULL, " + _
+		  "last_name TEXT NOT NULL, " + _
+		  "email TEXT, " + _
+		  "date_of_birth TEXT, " + _
+		  "gender TEXT, " + _
+		  "created_at TEXT DEFAULT (datetime('now')), " + _
+		  "updated_at TEXT DEFAULT (datetime('now')))")
+		  db.ExecuteSQL("CREATE INDEX IF NOT EXISTS idx_customers_name ON customers (last_name, first_name)")
+		  db.ExecuteSQL("CREATE INDEX IF NOT EXISTS idx_customers_email ON customers (email)")
 
 		  // Migration: add user_id column to notes if missing
 		  Var rs As RowSet = db.SelectSQL("PRAGMA table_info(notes)")

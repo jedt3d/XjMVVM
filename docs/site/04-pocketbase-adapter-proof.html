@@ -312,6 +312,8 @@ strings.</li>
 <li><code>CustomerRepositoryPocketBase</code> implements <code>ICustomerRepository</code>.</li>
 <li><code>FakePocketBaseTransport</code> lets XojoUnit tests prove the adapter without a live
 server.</li>
+<li><code>PocketBaseURLConnectionTransport</code> is the concrete Xojo HTTP transport for
+runtime use.</li>
 </ul>
 <p>The repository uses the stock PocketBase record endpoints:</p>
 <ul>
@@ -333,19 +335,22 @@ and <code>filter</code></li>
 </ul>
 <p>The existing <code>CustomerCoreTests</code> still cover the shared ViewModels through the
 fake repository after the ID contract changed from integer to string.</p>
-<h2>What Is Not Yet Proven</h2>
-<p>This cycle does not yet prove a live network call from Xojo to PocketBase. The
-next implementation cycle should add a concrete <code>URLConnection</code> transport and a
-developer smoke script that:</p>
+<h2>What Is Now Proven</h2>
+<p>Cycle 3 adds the concrete <code>PocketBaseURLConnectionTransport</code>, and
+<code>tools/pocketbase_smoke.py</code> proves the stock PocketBase side by:</p>
 <ol>
 <li>starts stock PocketBase locally</li>
 <li>creates or migrates the <code>customers</code> collection</li>
-<li>authenticates with a test user or service account</li>
-<li>runs list/create/update/delete through <code>CustomerRepositoryPocketBase</code></li>
-<li>records the exact PocketBase version and collection rules used for the test</li>
+<li>runs create/list/view/update/delete through the records API</li>
+<li>records the exact PocketBase version and temporary base URL used for the test</li>
 </ol>
+<h2>What Is Not Yet Proven</h2>
+<p>A full live Xojo runtime call still needs a smoke path that runs
+<code>CustomerRepositoryPocketBase</code> with <code>PocketBaseURLConnectionTransport</code> against
+that stock PocketBase process, including a real auth flow once production
+collection rules are chosen.</p>
 
-<nav class="chnav"><a class="prev" href="03-pocketbase-loop.html"><span class="dir">← Previous</span><span class="t">PocketBase Loop</span></a><a class="next" href="index.html"><span class="dir">Back →</span><span class="t">Contents</span></a></nav>
+<nav class="chnav"><a class="prev" href="03-pocketbase-loop.html"><span class="dir">← Previous</span><span class="t">PocketBase Loop</span></a><a class="next" href="05-urlconnection-transport.html"><span class="dir">Next →</span><span class="t">URLConnection Transport</span></a></nav>
 </article></main>
 <script>// viewer.js — responsive pan/zoom for every inline-SVG diagram on the page.
 // Each diagram is a .diagram figure containing a .stage > .canvas > svg and a .toolbar.

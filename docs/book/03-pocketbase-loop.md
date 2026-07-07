@@ -13,6 +13,7 @@ The Xojo side now starts with a small REST adapter layer:
 - `PocketBaseQuery`
 - `PocketBaseResponse`
 - `IPocketBaseTransport`
+- `PocketBaseURLConnectionTransport`
 - `FakePocketBaseTransport`
 
 Domain repositories such as `CustomerRepositoryPocketBase` should sit on top of
@@ -34,13 +35,16 @@ The PocketBase loop is real only when it can prove:
 The first implementation should keep backend customization out of scope until
 this compatibility proof passes.
 
-## Current Cycle 2 Proof
+## Current Proof
 
-Cycle 2 adds `CustomerRepositoryPocketBase` behind `ICustomerRepository`.
-The proof is intentionally transport-injected, so request paths, JSON mapping,
-token forwarding, create/update/delete decisions, and ViewModel compatibility can
-be tested without requiring every developer machine to have a PocketBase process
-running.
+Cycle 2 added `CustomerRepositoryPocketBase` behind `ICustomerRepository`.
+Cycle 3 added `PocketBaseURLConnectionTransport` and
+`tools/pocketbase_smoke.py`. The adapter proof is intentionally
+transport-injected, so request paths, JSON mapping, token forwarding,
+create/update/delete decisions, and ViewModel compatibility can be tested
+without requiring every unit test to start a PocketBase process.
 
-The next proof should add the concrete `URLConnection` transport and run it
-against a stock PocketBase executable with a real `customers` collection.
+The smoke harness now starts stock PocketBase, creates a disposable
+`customers` collection, and proves the record API shape with real
+create/list/view/update/delete calls. The next REST proof should run the same
+path from compiled Xojo code through `PocketBaseURLConnectionTransport`.
