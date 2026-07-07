@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { marked } from "marked";
 import { renderSnippet } from "./snippet.mjs";
-import { highlightCode } from "./highlighting.mjs";
+import { escapeHtml, highlightCode } from "./highlighting.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const meta = JSON.parse(readFileSync(`${ROOT}/book/meta.json`, "utf8"));
@@ -19,10 +19,29 @@ const READER_CSS = readFileSync(`${ROOT}/assets/reader.css`, "utf8");
 const JS = readFileSync(`${ROOT}/assets/viewer.js`, "utf8");
 const READER_JS = readFileSync(`${ROOT}/assets/reader.js`, "utf8");
 const renderer = new marked.Renderer();
+function codeLabel(language, source) {
+  if (language === "xojo") return "Xojo example";
+  if (language === "bash") return "Shell command";
+  if (language === "json") return "JSON";
+  if (language === "javascript") return "JavaScript";
+  if (language === "markdown") return "Markdown";
+  if ((language === "plaintext" || language === "text") && /(^|\n)[^\n]+\/\n/.test(source)) return "Directory listing";
+  if ((language === "plaintext" || language === "text") && source.includes(" -> ")) return "Conceptual flow";
+  return "Code block";
+}
+
 renderer.code = function code({ text, lang }) {
   const info = String(lang || "").match(/^\S*/)?.[0] || "plaintext";
-  const { html, language } = highlightCode(String(text).replace(/\n$/, ""), info);
-  return `<pre class="code fence lang-${language}"><code>${html}</code></pre>\n`;
+  const source = String(text).replace(/\n$/, "");
+  const { html, language } = highlightCode(source, info);
+  const label = escapeHtml(codeLabel(language, source));
+  return `<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">${label}</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-${language}"><code>${html}</code></pre></div>
+</figure>\n`;
 };
 marked.setOptions({ mangle: false, headerIds: false, renderer });
 

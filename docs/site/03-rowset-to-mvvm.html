@@ -96,6 +96,8 @@ blockquote{ margin:1.4em 0; padding:.2em 1.1em; border-left:3px solid var(--acce
 .snip-loc{ display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:12.5px;
   color:var(--accent); text-decoration:none; padding:2px 6px; border-radius:6px; }
 .snip-loc:hover{ background:var(--accent-soft); text-decoration:none; }
+.snip-label{ color:var(--ink-soft); cursor:default; font-weight:600; }
+.snip-label:hover{ background:transparent; }
 .snip-ic{ width:13px; height:13px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
 .snip-path{ font-weight:600; } .snip-lines{ opacity:.7; }
 .snip-cap{ font-family:var(--body); font-size:13px; color:var(--muted); }
@@ -105,6 +107,7 @@ pre.code code{ display:block; }
 pre.code.fence{ margin:1.25em 0; padding:14px 16px; overflow-x:auto; border:1px solid var(--line); border-radius:12px;
   box-shadow:0 1px 2px rgba(15,23,42,.04); }
 pre.code.fence code{ white-space:pre; }
+.snippet-fence pre.code.fence{ margin:0; border:0; border-radius:0; box-shadow:none; }
 .code .cl{ display:block; white-space:pre; padding:0 16px 0 0; }
 .code .cl::before{ content:counter(ln); counter-increment:ln; display:inline-block;
   width:3.2ch; margin-right:16px; padding-right:10px; text-align:right; color:var(--gutter);
@@ -301,7 +304,12 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
 <p class="chapter-kicker">Part 1 · Chapter 3</p>
 <h1>From RowSet To MVVM</h1>
 <p>Many Xojo desktop apps begin with direct SQL in a Window event. That is normal. Xojo makes it easy:</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> SearchButton_Pressed()
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> SearchButton_Pressed()
   CustomerList.RemoveAllRows
 
   <span class="hljs-keyword">Var</span> sql <span class="hljs-keyword">As</span> <span class="hljs-type">String</span> = <span class="hljs-string">&quot;SELECT id, first_name, last_name, email FROM customers &quot;</span> + _
@@ -319,7 +327,8 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
   <span class="hljs-keyword">Wend</span>
 
   rs.Close()
-<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre></div>
+</figure>
 <p>This code is understandable, and for small tools it may be enough. The problem appears when the app grows:</p>
 <ul>
 <li>Search logic is trapped inside a Window.</li>
@@ -412,14 +421,20 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
   </div><figcaption class="figcap"><b>Figure 3.1</b> - How direct SQL Window code becomes model, repository, ViewModel, and composition code.</figcaption></figure>
 <h2>Step 1: Keep SQL, But Move Mapping To A Model</h2>
 <p>The first improvement is not MVVM yet. It is simply: stop passing raw columns around your app.</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Private</span> <span class="hljs-keyword">Function</span> CustomerFromRow(rs <span class="hljs-keyword">As</span> <span class="hljs-type">RowSet</span>) <span class="hljs-keyword">As</span> Customer
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Private</span> <span class="hljs-keyword">Function</span> CustomerFromRow(rs <span class="hljs-keyword">As</span> <span class="hljs-type">RowSet</span>) <span class="hljs-keyword">As</span> Customer
   <span class="hljs-keyword">Var</span> c <span class="hljs-keyword">As</span> <span class="hljs-keyword">New</span> Customer()
   c.ID = rs.Column(<span class="hljs-string">&quot;id&quot;</span>).StringValue
   c.FirstName = rs.Column(<span class="hljs-string">&quot;first_name&quot;</span>).StringValue
   c.LastName = rs.Column(<span class="hljs-string">&quot;last_name&quot;</span>).StringValue
   c.Email = rs.Column(<span class="hljs-string">&quot;email&quot;</span>).StringValue
   <span class="hljs-keyword">Return</span> c
-<span class="hljs-keyword">End</span> <span class="hljs-keyword">Function</span></code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Function</span></code></pre></div>
+</figure>
 <p>XjMVVM keeps this idea in the SQL repository:</p>
 <figure class="snippet">
   <figcaption class="snip-head">
@@ -435,10 +450,16 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
 <p>This is the <strong>Data Mapper</strong> pattern in a very practical Xojo form: database rows become objects, and objects become database parameters.</p>
 <h2>Step 2: Name The Database Operations</h2>
 <p>The Window usually does not need to know the SQL string. It needs to say:</p>
-<pre class="code fence lang-xojo"><code>Find customers matching this search term.
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code>Find customers matching this search term.
 Count customers matching this search term.
 Save this customer.
-Delete this customer.</code></pre>
+Delete this customer.</code></pre></div>
+</figure>
 <p>That is why XjMVVM defines a repository contract:</p>
 <figure class="snippet">
   <figcaption class="snip-head">
@@ -496,7 +517,12 @@ Delete this customer.</code></pre>
 <p>The ViewModel is not a UI control. It is a plain Xojo class that can be tested.</p>
 <h2>Step 5: Make The Window Thin</h2>
 <p>The Window becomes a translator between controls and the ViewModel:</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Private</span> <span class="hljs-keyword">Sub</span> ReloadCustomers()
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Private</span> <span class="hljs-keyword">Sub</span> ReloadCustomers()
   mListVM.SearchTerm = SearchField.Text
   mListVM.LoadPage(<span class="hljs-number">1</span>, <span class="hljs-number">50</span>)
 
@@ -507,7 +533,8 @@ Delete this customer.</code></pre>
   <span class="hljs-keyword">Next</span>
 
   StatusLabel.Text = mListVM.StatusMessage
-<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre></div>
+</figure>
 <p>This is still normal Xojo code. It is just organized so the Window does not become the whole application.</p>
 <h2>Step 6: Choose The Backend At The App Boundary</h2>
 <p>Once the ViewModel depends on <code>ICustomerRepository</code>, the app can select a backend during startup:</p>

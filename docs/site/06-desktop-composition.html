@@ -96,6 +96,8 @@ blockquote{ margin:1.4em 0; padding:.2em 1.1em; border-left:3px solid var(--acce
 .snip-loc{ display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:12.5px;
   color:var(--accent); text-decoration:none; padding:2px 6px; border-radius:6px; }
 .snip-loc:hover{ background:var(--accent-soft); text-decoration:none; }
+.snip-label{ color:var(--ink-soft); cursor:default; font-weight:600; }
+.snip-label:hover{ background:transparent; }
 .snip-ic{ width:13px; height:13px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
 .snip-path{ font-weight:600; } .snip-lines{ opacity:.7; }
 .snip-cap{ font-family:var(--body); font-size:13px; color:var(--muted); }
@@ -105,6 +107,7 @@ pre.code code{ display:block; }
 pre.code.fence{ margin:1.25em 0; padding:14px 16px; overflow-x:auto; border:1px solid var(--line); border-radius:12px;
   box-shadow:0 1px 2px rgba(15,23,42,.04); }
 pre.code.fence code{ white-space:pre; }
+.snippet-fence pre.code.fence{ margin:0; border:0; border-radius:0; box-shadow:none; }
 .code .cl{ display:block; white-space:pre; padding:0 16px 0 0; }
 .code .cl::before{ content:counter(ln); counter-increment:ln; display:inline-block;
   width:3.2ch; margin-right:16px; padding-right:10px; text-align:right; color:var(--gutter);
@@ -388,30 +391,53 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
 <p>This pattern prevents every Window from constructing its own backend client.</p>
 <h2>Suggested Desktop Startup</h2>
 <p>In a real desktop app, build the context once during startup or after login:</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> Opening()
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> Opening()
   <span class="hljs-keyword">Var</span> dbFile <span class="hljs-keyword">As</span> <span class="hljs-type">FolderItem</span> = <span class="hljs-built_in">SpecialFolder</span>.ApplicationData.Child(<span class="hljs-string">&quot;XjMVVM&quot;</span>).Child(<span class="hljs-string">&quot;customers.sqlite&quot;</span>)
   <span class="hljs-keyword">Var</span> settings <span class="hljs-keyword">As</span> CustomerBackendSettings = CustomerBackendSettings.SQLiteFile(dbFile)
 
   mCustomerContext = <span class="hljs-keyword">New</span> CustomerDesktopAppContext(settings)
   System.DebugLog(mCustomerContext.StatusMessage)
-<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre></div>
+</figure>
 <p>After a successful PocketBase login, the same app can switch to the REST backend:</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> UseServerBackend(session <span class="hljs-keyword">As</span> PocketBaseAuthSession)
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> UseServerBackend(session <span class="hljs-keyword">As</span> PocketBaseAuthSession)
   <span class="hljs-keyword">Var</span> settings <span class="hljs-keyword">As</span> CustomerBackendSettings
   settings = CustomerBackendSettings.PocketBase(<span class="hljs-string">&quot;https://api.example.com&quot;</span>, session.Token, <span class="hljs-string">&quot;customers&quot;</span>, <span class="hljs-number">30</span>)
 
   <span class="hljs-keyword">If</span> mCustomerContext &lt;&gt; <span class="hljs-literal">Nil</span> <span class="hljs-keyword">Then</span> mCustomerContext.Close()
   mCustomerContext = <span class="hljs-keyword">New</span> CustomerDesktopAppContext(settings)
-<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre></div>
+</figure>
 <h2>Window Binding</h2>
 <p>Create ViewModels from the app context:</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> CustomerListWindow_Opening()
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> CustomerListWindow_Opening()
   mListVM = <span class="hljs-built_in">App</span>.CustomerContext.ListViewModel()
   mListVM.LoadPage(<span class="hljs-number">1</span>, <span class="hljs-number">50</span>)
   RenderCustomers(mListVM.Customers())
-<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre></div>
+</figure>
 <p>For an edit window:</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> CustomerEditor_Opening(customerID <span class="hljs-keyword">As</span> <span class="hljs-type">String</span>)
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> CustomerEditor_Opening(customerID <span class="hljs-keyword">As</span> <span class="hljs-type">String</span>)
   mDetailVM = <span class="hljs-built_in">App</span>.CustomerContext.DetailViewModel()
   mDetailVM.Load(customerID)
 
@@ -421,15 +447,22 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
     LastNameField.Text = c.LastName
     EmailField.Text = c.Email
   <span class="hljs-keyword">End</span> <span class="hljs-keyword">If</span>
-<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre></div>
+</figure>
 <h2>Shutdown</h2>
 <p>Call <code>Close()</code> when the app changes backend or quits. This lets SQLite and direct SQL repositories close owned connections.</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> Closing()
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> Closing()
   <span class="hljs-keyword">If</span> mCustomerContext &lt;&gt; <span class="hljs-literal">Nil</span> <span class="hljs-keyword">Then</span>
     mCustomerContext.Close()
     mCustomerContext = <span class="hljs-literal">Nil</span>
   <span class="hljs-keyword">End</span> <span class="hljs-keyword">If</span>
-<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre></div>
+</figure>
 <p>That lifecycle matters in cross-platform desktop apps because file locks and connection cleanup differ by operating system.</p>
 
 <nav class="chnav"><a class="prev" href="05-backend-options.html"><span class="dir">← Previous</span><span class="t">Backend Options</span></a><a class="next" href="07-pocketbase-production.html"><span class="dir">Next →</span><span class="t">PocketBase Production</span></a></nav>

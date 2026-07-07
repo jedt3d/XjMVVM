@@ -96,6 +96,8 @@ blockquote{ margin:1.4em 0; padding:.2em 1.1em; border-left:3px solid var(--acce
 .snip-loc{ display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:12.5px;
   color:var(--accent); text-decoration:none; padding:2px 6px; border-radius:6px; }
 .snip-loc:hover{ background:var(--accent-soft); text-decoration:none; }
+.snip-label{ color:var(--ink-soft); cursor:default; font-weight:600; }
+.snip-label:hover{ background:transparent; }
 .snip-ic{ width:13px; height:13px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
 .snip-path{ font-weight:600; } .snip-lines{ opacity:.7; }
 .snip-cap{ font-family:var(--body); font-size:13px; color:var(--muted); }
@@ -105,6 +107,7 @@ pre.code code{ display:block; }
 pre.code.fence{ margin:1.25em 0; padding:14px 16px; overflow-x:auto; border:1px solid var(--line); border-radius:12px;
   box-shadow:0 1px 2px rgba(15,23,42,.04); }
 pre.code.fence code{ white-space:pre; }
+.snippet-fence pre.code.fence{ margin:0; border:0; border-radius:0; box-shadow:none; }
 .code .cl{ display:block; white-space:pre; padding:0 16px 0 0; }
 .code .cl::before{ content:counter(ln); counter-increment:ln; display:inline-block;
   width:3.2ch; margin-right:16px; padding-right:10px; text-align:right; color:var(--gutter);
@@ -381,7 +384,13 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
 <li>Collection rules require the authenticated user to own the record.</li>
 </ul>
 <p>The owner rule is:</p>
-<pre class="code fence lang-text"><code>@request.auth.id != &quot;&quot; &amp;&amp; owner = @request.auth.id</code></pre>
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Code block</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-text"><code>@request.auth.id != &quot;&quot; &amp;&amp; owner = @request.auth.id</code></pre></div>
+</figure>
 <h2>Migration</h2>
 <p>The migration creates or reuses <code>users</code>, creates <code>customers</code>, adds fields, and creates useful owner/name/email indexes.</p>
 <figure class="snippet">
@@ -438,7 +447,12 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
 <p>The adapter owns query filters, record parsing, and API path construction. The ViewModel still sees only Customers.</p>
 <h2>Login Flow</h2>
 <p>A desktop login flow should look like this:</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Var</span> transport <span class="hljs-keyword">As</span> <span class="hljs-keyword">New</span> PocketBaseURLConnectionTransport(<span class="hljs-number">30</span>)
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Var</span> transport <span class="hljs-keyword">As</span> <span class="hljs-keyword">New</span> PocketBaseURLConnectionTransport(<span class="hljs-number">30</span>)
 <span class="hljs-keyword">Var</span> client <span class="hljs-keyword">As</span> <span class="hljs-keyword">New</span> PocketBaseClient(ServerURLField.Text, transport)
 <span class="hljs-keyword">Var</span> auth <span class="hljs-keyword">As</span> <span class="hljs-keyword">New</span> PocketBaseAuthService(client)
 
@@ -452,7 +466,8 @@ session = auth.AuthWithPassword(EmailField.Text, PasswordField.Text)
 
 <span class="hljs-keyword">Var</span> settings <span class="hljs-keyword">As</span> CustomerBackendSettings
 settings = CustomerBackendSettings.PocketBase(client.BaseURL(), session.Token)
-<span class="hljs-built_in">App</span>.CustomerContext = <span class="hljs-keyword">New</span> CustomerDesktopAppContext(settings)</code></pre>
+<span class="hljs-built_in">App</span>.CustomerContext = <span class="hljs-keyword">New</span> CustomerDesktopAppContext(settings)</code></pre></div>
+</figure>
 <p>Store the token according to the security policy of the finished app. Do not hard-code production tokens in source files.</p>
 <h2>Production Smoke Proof</h2>
 <p>The smoke harness starts stock PocketBase with temporary data, applies the committed migrations, creates a superuser and two users, and verifies that only the owner can create, list, update, and delete the Customer record.</p>
@@ -468,7 +483,13 @@ settings = CustomerBackendSettings.PocketBase(client.BaseURL(), session.Token)
   <div class="snip-body"><pre class="code lang-plaintext" style="counter-reset: ln 104;"><code><span class="cl">def run_smoke(base_url: str) -&gt; dict:</span><span class="cl">    super_token, _ = auth_token(base_url, &quot;_superusers&quot;, SUPER_EMAIL, SUPER_PASSWORD)</span><span class="cl">    owner = create_user(base_url, super_token, OWNER_EMAIL, OWNER_PASSWORD, &quot;Owner User&quot;)</span><span class="cl">    other = create_user(base_url, super_token, OTHER_EMAIL, OTHER_PASSWORD, &quot;Other User&quot;)</span><span class="cl">    owner_token, owner_auth = auth_token(base_url, &quot;users&quot;, OWNER_EMAIL, OWNER_PASSWORD)</span><span class="cl">    other_token, other_auth = auth_token(base_url, &quot;users&quot;, OTHER_EMAIL, OTHER_PASSWORD)</span><span class="cl">&nbsp;</span><span class="cl">    create_body = {</span><span class="cl">        &quot;owner&quot;: owner_auth[&quot;id&quot;],</span><span class="cl">        &quot;first_name&quot;: &quot;Ada&quot;,</span><span class="cl">        &quot;last_name&quot;: &quot;Lovelace&quot;,</span><span class="cl">        &quot;email&quot;: &quot;ada@example.com&quot;,</span><span class="cl">        &quot;date_of_birth&quot;: &quot;1815-12-10&quot;,</span><span class="cl">        &quot;gender&quot;: &quot;female&quot;,</span><span class="cl">    }</span><span class="cl">&nbsp;</span><span class="cl">    status, denied_create = request_json(&quot;POST&quot;, f&quot;{base_url}/api/collections/customers/records&quot;, create_body)</span><span class="cl">    require_denied(status, denied_create, &quot;unauthenticated create&quot;)</span><span class="cl">&nbsp;</span><span class="cl">    status, created = request_json(&quot;POST&quot;, f&quot;{base_url}/api/collections/customers/records&quot;, create_body, token=owner_token)</span><span class="cl">    if status not in {200, 201}:</span><span class="cl">        raise SystemExit(f&quot;Owner create failed: HTTP {status} {created}&quot;)</span><span class="cl">    record_id = created.get(&quot;id&quot;)</span><span class="cl">    if not record_id:</span><span class="cl">        raise SystemExit(f&quot;Owner create response did not include id: {created}&quot;)</span><span class="cl">&nbsp;</span><span class="cl">    status, owner_list = request_json(&quot;GET&quot;, f&quot;{base_url}/api/collections/customers/records?page=1&amp;perPage=10&quot;, token=owner_token)</span><span class="cl">    if status != 200 or owner_list.get(&quot;totalItems&quot;) != 1:</span><span class="cl">        raise SystemExit(f&quot;Owner list failed: HTTP {status} {owner_list}&quot;)</span><span class="cl">&nbsp;</span><span class="cl">    status, guest_list = request_json(&quot;GET&quot;, f&quot;{base_url}/api/collections/customers/records?page=1&amp;perPage=10&quot;)</span><span class="cl">    if status != 200 or guest_list.get(&quot;totalItems&quot;) != 0:</span><span class="cl">        raise SystemExit(f&quot;Guest list should be filtered empty: HTTP {status} {guest_list}&quot;)</span><span class="cl">&nbsp;</span><span class="cl">    status, other_list = request_json(&quot;GET&quot;, f&quot;{base_url}/api/collections/customers/records?page=1&amp;perPage=10&quot;, token=other_token)</span><span class="cl">    if status != 200 or other_list.get(&quot;totalItems&quot;) != 0:</span><span class="cl">        raise SystemExit(f&quot;Other user list should be filtered empty: HTTP {status} {other_list}&quot;)</span><span class="cl">&nbsp;</span><span class="cl">    status, denied_view = request_json(&quot;GET&quot;, f&quot;{base_url}/api/collections/customers/records/{record_id}&quot;, token=other_token)</span><span class="cl">    require_denied(status, denied_view, &quot;cross-user view&quot;)</span><span class="cl">&nbsp;</span><span class="cl">    status, updated = request_json(&quot;PATCH&quot;, f&quot;{base_url}/api/collections/customers/records/{record_id}&quot;, {</span><span class="cl">        &quot;last_name&quot;: &quot;Byron&quot;,</span><span class="cl">    }, token=owner_token)</span><span class="cl">    if status != 200 or updated.get(&quot;last_name&quot;) != &quot;Byron&quot;:</span><span class="cl">        raise SystemExit(f&quot;Owner update failed: HTTP {status} {updated}&quot;)</span><span class="cl">&nbsp;</span><span class="cl">    status, denied_update = request_json(&quot;PATCH&quot;, f&quot;{base_url}/api/collections/customers/records/{record_id}&quot;, {</span><span class="cl">        &quot;last_name&quot;: &quot;Wrong&quot;,</span><span class="cl">    }, token=other_token)</span><span class="cl">    require_denied(status, denied_update, &quot;cross-user update&quot;)</span><span class="cl">&nbsp;</span><span class="cl">    status, deleted = request_json(&quot;DELETE&quot;, f&quot;{base_url}/api/collections/customers/records/{record_id}&quot;, token=owner_token)</span><span class="cl">    if status not in {200, 204}:</span><span class="cl">        raise SystemExit(f&quot;Owner delete failed: HTTP {status} {deleted}&quot;)</span><span class="cl">&nbsp;</span><span class="cl">    return {</span><span class="cl">        &quot;base_url&quot;: base_url,</span><span class="cl">        &quot;owner_user_id&quot;: owner[&quot;id&quot;],</span><span class="cl">        &quot;other_user_id&quot;: other[&quot;id&quot;],</span><span class="cl">        &quot;auth_owner_id&quot;: owner_auth[&quot;id&quot;],</span><span class="cl">        &quot;auth_other_id&quot;: other_auth[&quot;id&quot;],</span><span class="cl">        &quot;record_id&quot;: record_id,</span><span class="cl">        &quot;owner_list_total&quot;: owner_list.get(&quot;totalItems&quot;),</span><span class="cl">        &quot;guest_list_total&quot;: guest_list.get(&quot;totalItems&quot;),</span><span class="cl">        &quot;other_list_total&quot;: other_list.get(&quot;totalItems&quot;),</span><span class="cl">        &quot;updated_last_name&quot;: updated.get(&quot;last_name&quot;),</span><span class="cl">    }</span></code></pre></div>
 </figure>
 <p>Run it locally with:</p>
-<pre class="code fence lang-bash"><code>python3 tools/pocketbase_production_smoke.py</code></pre>
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Shell command</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-bash"><code>python3 tools/pocketbase_production_smoke.py</code></pre></div>
+</figure>
 <p>This proves the backend rule contract. It does not replace compiled desktop testing for URLConnection behavior, login UI, token storage, or platform-specific network failures.</p>
 
 <nav class="chnav"><a class="prev" href="06-desktop-composition.html"><span class="dir">← Previous</span><span class="t">Desktop Composition</span></a><a class="next" href="08-direct-database.html"><span class="dir">Next →</span><span class="t">Direct Database</span></a></nav>

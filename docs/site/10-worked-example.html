@@ -96,6 +96,8 @@ blockquote{ margin:1.4em 0; padding:.2em 1.1em; border-left:3px solid var(--acce
 .snip-loc{ display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:12.5px;
   color:var(--accent); text-decoration:none; padding:2px 6px; border-radius:6px; }
 .snip-loc:hover{ background:var(--accent-soft); text-decoration:none; }
+.snip-label{ color:var(--ink-soft); cursor:default; font-weight:600; }
+.snip-label:hover{ background:transparent; }
 .snip-ic{ width:13px; height:13px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
 .snip-path{ font-weight:600; } .snip-lines{ opacity:.7; }
 .snip-cap{ font-family:var(--body); font-size:13px; color:var(--muted); }
@@ -105,6 +107,7 @@ pre.code code{ display:block; }
 pre.code.fence{ margin:1.25em 0; padding:14px 16px; overflow-x:auto; border:1px solid var(--line); border-radius:12px;
   box-shadow:0 1px 2px rgba(15,23,42,.04); }
 pre.code.fence code{ white-space:pre; }
+.snippet-fence pre.code.fence{ margin:0; border:0; border-radius:0; box-shadow:none; }
 .code .cl{ display:block; white-space:pre; padding:0 16px 0 0; }
 .code .cl::before{ content:counter(ln); counter-increment:ln; display:inline-block;
   width:3.2ch; margin-right:16px; padding-right:10px; text-align:right; color:var(--gutter);
@@ -312,7 +315,12 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
 <p>That is enough to exercise MVVM without drowning the developer in screens.</p>
 <h2>Code Structure</h2>
 <p>The feature is split by responsibility:</p>
-<pre class="code fence lang-text"><code>CustomerDesk/
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Directory listing</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-text"><code>CustomerDesk/
   Windows/
     CustomerListWindow
     CustomerEditWindow
@@ -327,11 +335,17 @@ XjMVVM framework/
   Core/ViewModels/CustomerDetailViewModel
   Composition/CustomerDesktopAppContext
   Backends/SQLite/CustomerRepositorySQLite
-  Backends/PocketBase/CustomerRepositoryPocketBase</code></pre>
+  Backends/PocketBase/CustomerRepositoryPocketBase</code></pre></div>
+</figure>
 <p>The app owns windows and user preferences. The framework owns the MVVM and backend contracts.</p>
 <h2>Opening The App</h2>
 <p>At startup, Customer Desk chooses the safest available backend.</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> AppOpening()
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> AppOpening()
   <span class="hljs-keyword">Var</span> settings <span class="hljs-keyword">As</span> CustomerBackendSettings
 
   <span class="hljs-keyword">If</span> Preferences.UseServer <span class="hljs-keyword">And</span> Preferences.LastToken &lt;&gt; <span class="hljs-string">&quot;&quot;</span> <span class="hljs-keyword">Then</span>
@@ -342,7 +356,8 @@ XjMVVM framework/
   <span class="hljs-keyword">End</span> <span class="hljs-keyword">If</span>
 
   CustomerContext = <span class="hljs-keyword">New</span> CustomerDesktopAppContext(settings)
-<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre></div>
+</figure>
 <p>What this teaches:</p>
 <ul>
 <li>Startup is where environment decisions belong.</li>
@@ -351,7 +366,12 @@ XjMVVM framework/
 </ul>
 <h2>Search Customers</h2>
 <p>The list window owns the list control, but not the search algorithm.</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> SearchField_TextChanged()
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> SearchField_TextChanged()
   ReloadPage(<span class="hljs-number">1</span>)
 <span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span>
 
@@ -366,7 +386,8 @@ XjMVVM framework/
   <span class="hljs-keyword">Next</span>
 
   StatusLabel.Text = mListVM.StatusMessage
-<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre></div>
+</figure>
 <p>What this teaches:</p>
 <ul>
 <li>The Window still controls rendering.</li>
@@ -375,7 +396,12 @@ XjMVVM framework/
 </ul>
 <h2>Edit Customer</h2>
 <p>The edit window converts controls into a model, then asks the ViewModel to save.</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> SaveButton_Pressed()
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> SaveButton_Pressed()
   <span class="hljs-keyword">Var</span> c <span class="hljs-keyword">As</span> <span class="hljs-keyword">New</span> Customer(FirstNameField.Text, LastNameField.Text, EmailField.Text)
   c.ID = mCustomerID
   c.OwnerID = <span class="hljs-built_in">App</span>.CurrentSession.UserID
@@ -388,7 +414,8 @@ XjMVVM framework/
   <span class="hljs-keyword">End</span> <span class="hljs-keyword">If</span>
 
   <span class="hljs-built_in">Self</span>.Close()
-<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre></div>
+</figure>
 <p>What this teaches:</p>
 <ul>
 <li>Validation and persistence are not inside the button event.</li>
@@ -397,7 +424,12 @@ XjMVVM framework/
 </ul>
 <h2>Login And Switch To PocketBase</h2>
 <p>PocketBase login creates a session token. After login, the app replaces the context.</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> LoginButton_Pressed()
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> LoginButton_Pressed()
   <span class="hljs-keyword">Var</span> transport <span class="hljs-keyword">As</span> <span class="hljs-keyword">New</span> PocketBaseURLConnectionTransport(<span class="hljs-number">30</span>)
   <span class="hljs-keyword">Var</span> client <span class="hljs-keyword">As</span> <span class="hljs-keyword">New</span> PocketBaseClient(ServerURLField.Text, transport)
   <span class="hljs-keyword">Var</span> auth <span class="hljs-keyword">As</span> <span class="hljs-keyword">New</span> PocketBaseAuthService(client)
@@ -413,7 +445,8 @@ XjMVVM framework/
   <span class="hljs-keyword">If</span> <span class="hljs-built_in">App</span>.CustomerContext &lt;&gt; <span class="hljs-literal">Nil</span> <span class="hljs-keyword">Then</span> <span class="hljs-built_in">App</span>.CustomerContext.Close()
   <span class="hljs-built_in">App</span>.CustomerContext = <span class="hljs-keyword">New</span> CustomerDesktopAppContext( _
     CustomerBackendSettings.PocketBase(ServerURLField.Text, session.Token))
-<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre></div>
+</figure>
 <p>What this teaches:</p>
 <ul>
 <li>Login is an app/session concern.</li>
@@ -433,7 +466,13 @@ XjMVVM framework/
 <p>Do not hide sync inside <code>SaveButton_Pressed</code>.</p>
 <h2>Adding The Next Feature</h2>
 <p>For Orders, Invoices, Inventory, or Appointments, repeat the same vertical slice:</p>
-<pre class="code fence lang-text"><code>Model -&gt; Validator -&gt; Repository interface -&gt; ViewModel -&gt; Fake repo -&gt; real backend adapters -&gt; composition -&gt; Window</code></pre>
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Conceptual flow</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-text"><code>Model -&gt; Validator -&gt; Repository interface -&gt; ViewModel -&gt; Fake repo -&gt; real backend adapters -&gt; composition -&gt; Window</code></pre></div>
+</figure>
 <p>Build the first screen against a fake repository. Add SQLite or PocketBase after the ViewModel behavior is clear.</p>
 <h2>What The Example Proves</h2>
 <p>Customer Desk proves the core claim of XjMVVM:</p>
