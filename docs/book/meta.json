@@ -3,7 +3,7 @@
   "brand": "XjMVVM Docs",
   "title": "XjMVVM Production Reboot",
   "subtitle": "A source-backed implementation notebook for one-repo MVVM, PocketBase, SQLite, and desktop-first Xojo apps",
-  "version": "Desktop and direct database proof · 2026-07-08",
+  "version": "CI and docs publishing proof · 2026-07-08",
   "parts": [
     {
       "label": "Part 1",
@@ -86,6 +86,13 @@
           "title": "Direct Database Expansion",
           "sub": "Generic direct-SQL Customer repository support for Xojo Database drivers",
           "file": "11-direct-database-expansion.md"
+        },
+        {
+          "num": "12",
+          "slug": "12-ci-docs-publishing",
+          "title": "CI And Docs Publishing",
+          "sub": "GitHub Actions validation and GitHub Pages deployment for the framework docs",
+          "file": "12-ci-docs-publishing.md"
         }
       ]
     }
