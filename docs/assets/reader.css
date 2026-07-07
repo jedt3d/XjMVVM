@@ -1,0 +1,94 @@
+/* reader.css — inline commenting UI (active only when served by tools/serve.mjs) */
+.prose{ position:relative; }
+body.reader .wrap{ padding-left:62px; }
+
+/* gutter marker for each commentable block — right edge fixed 12px left of the block line,
+   grows leftward so "✓ 3" fits */
+.cmk{ position:absolute; right:calc(100% + 12px); left:auto; min-width:26px; height:26px; margin-top:2px;
+  border-radius:8px; border:1px solid var(--line); background:#fff; color:var(--muted); cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center; gap:2px; white-space:nowrap;
+  font-family:var(--body); font-size:12.5px; transition:filter .12s, border-color .12s, background .12s;
+  padding:0 7px; line-height:1; z-index:5; }
+.cmk:hover{ filter:brightness(1.05); }
+.cmk.s-green{ opacity:1; font-weight:700; background:#22c55e; color:#fff; border-color:#16a34a; }
+.cmk.s-yellow{ opacity:1; font-weight:700; background:#facc15; color:#713f12; border-color:#eab308; }
+.cmk.s-gray{ opacity:1; background:#e2e8f0; color:#64748b; border-color:#cbd5e1; }
+/* per-highlight marks now carry the state color; no whole-paragraph fill */
+.blk-commented{ }
+mark.hl{ color:inherit; background:transparent; border-radius:3px; padding:0 1px; cursor:pointer;
+  box-decoration-break:clone; -webkit-box-decoration-break:clone; transition:filter .1s; }
+mark.hl:hover{ filter:brightness(.93); }
+mark.hl.s-green{ background:#bbf7d0; }
+mark.hl.s-yellow{ background:#fde68a; }
+mark.hl.s-gray{ background:#e7ebf0; }
+/* quote separator inside the "all comments" view */
+.thread-quote{ font-size:12.5px; color:var(--muted); margin:12px 0 2px; padding:3px 9px;
+  border-left:2px solid var(--accent); background:#fff; border-radius:0 6px 6px 0; }
+
+/* comment card (thread + composer) inserted under a block */
+.ccard{ margin:12px 0 18px; border:1px solid var(--line); border-radius:12px; background:#fffdf7;
+  box-shadow:0 6px 20px rgba(15,23,42,.08); overflow:hidden; font-size:15px; }
+.ccard .chead{ display:flex; align-items:center; gap:8px; padding:8px 12px; background:#fff7e8;
+  border-bottom:1px solid var(--line); font-family:var(--display); font-size:13px; color:#7c4a12; }
+.ccard .chead .x{ margin-left:auto; cursor:pointer; color:var(--muted); border:0; background:none; font-size:16px; }
+.ccard .quote{ margin:8px 12px 0; padding:6px 10px; border-left:2px solid var(--accent); color:var(--muted);
+  font-size:13px; background:#fff; border-radius:0 6px 6px 0; max-height:60px; overflow:hidden; }
+.thread{ padding:6px 12px; display:flex; flex-direction:column; gap:8px; }
+.cmt{ border:1px solid var(--line); border-radius:9px; padding:8px 10px; background:#fff; }
+.cmt.resolved{ opacity:.55; }
+.cmt.claude{ background:#eff6ff; border-color:#dbeafe; }
+.cmt .meta{ display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); margin-bottom:3px; }
+.cmt .who{ font-weight:700; color:#0f172a; } .cmt .who.claude{ color:#1d4ed8; }
+.cmt .acts{ margin-left:auto; display:flex; gap:8px; }
+.cmt .acts button{ border:0; background:none; color:var(--muted); cursor:pointer; font-size:12px; padding:0; }
+.cmt .acts button:hover{ color:var(--accent); }
+.cmt .acts .fb{ padding:1px 5px; border-radius:6px; filter:grayscale(.35); opacity:.75; }
+.cmt .acts .fb:hover{ opacity:1; filter:none; background:#f1f5f9; }
+.cmt .acts .fb.on-up{ background:#dcfce7; opacity:1; filter:none; }
+.cmt .acts .fb.on-down{ background:#fee2e2; opacity:1; filter:none; }
+.cmt .txt{ white-space:pre-wrap; }
+.cmt.reply{ border-left:2px solid #f0c88a; background:#fffdf7; position:relative; }
+.cmt .rarrow{ color:var(--accent); font-weight:700; }
+.replybox{ margin-top:8px; }
+.replybox textarea{ width:100%; min-height:52px; resize:vertical; font-family:var(--body); font-size:14px;
+  border:1px solid var(--line); border-radius:8px; padding:7px 9px; box-sizing:border-box; }
+.replybox .row{ display:flex; margin-top:6px; }
+.replybox .save{ margin-left:auto; background:#0f172a; color:#fff; border:0; border-radius:7px; padding:5px 12px;
+  font-family:var(--body); font-size:13px; cursor:pointer; }
+.replybox .save:hover{ background:#1e293b; }
+textarea.editta{ width:100%; min-height:56px; font-family:var(--body); font-size:15px;
+  border:1px solid var(--line); border-radius:8px; padding:7px 9px; box-sizing:border-box; }
+.compose{ padding:8px 12px 12px; }
+.compose textarea{ width:100%; min-height:64px; resize:vertical; font-family:var(--body); font-size:15px;
+  border:1px solid var(--line); border-radius:8px; padding:8px 10px; box-sizing:border-box; }
+.compose .row{ display:flex; gap:8px; margin-top:8px; align-items:center; }
+.compose .row .hint{ color:var(--muted); font-size:12px; }
+.compose button.save{ margin-left:auto; background:var(--accent); color:#fff; border:0; border-radius:8px;
+  padding:7px 16px; font-family:var(--body); font-size:14px; cursor:pointer; }
+.compose button.save:hover{ background:#a2560f; }
+
+/* diagram per-node commenting: hover a node to comment it; outline colored by state */
+body.reader .diagram svg g.node{ cursor:pointer; }
+body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-width:2.2 !important; }
+.diagram svg g.node.nc-green > rect{ stroke:#16a34a !important; stroke-width:2.6 !important; }
+.diagram svg g.node.nc-yellow > rect{ stroke:#eab308 !important; stroke-width:2.6 !important; }
+.diagram svg g.node.nc-gray > rect{ stroke:#94a3b8 !important; stroke-width:2.4 !important; }
+
+/* floating selection menu (appears when you highlight text) */
+.selpop{ position:fixed; z-index:60; display:flex; gap:2px; align-items:center; padding:4px;
+  background:#0f172a; border-radius:11px; box-shadow:0 8px 26px rgba(15,23,42,.30);
+  opacity:0; transform:translateY(4px) scale(.97); pointer-events:none; transition:opacity .1s, transform .1s; }
+.selpop.show{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
+.selpop button{ display:inline-flex; align-items:center; gap:6px; border:0; background:none; color:#fff;
+  font-family:var(--body); font-size:13px; padding:6px 11px; border-radius:8px; cursor:pointer; line-height:1; }
+.selpop button:hover{ background:rgba(255,255,255,.15); }
+.selpop button svg{ width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.selpop .arrow{ position:absolute; width:10px; height:10px; background:#0f172a; transform:rotate(45deg); bottom:-4px; }
+.selpop.below .arrow{ bottom:auto; top:-4px; }
+
+/* offline hint */
+.reader-off{ position:fixed; bottom:14px; right:14px; z-index:40; background:#0f172a; color:#fff;
+  font-size:12.5px; padding:8px 12px; border-radius:10px; opacity:.9; max-width:280px; }
+.reader-off code{ background:rgba(255,255,255,.15); padding:1px 5px; border-radius:4px; }
+
+@media (max-width:720px){ body.reader .wrap{ padding-left:16px; } .cmk{ left:auto; right:4px; } }
