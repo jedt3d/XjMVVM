@@ -7,7 +7,7 @@ review, and publishing.
 
 ```bash
 cd docs
-npm install
+npm ci
 npm run build
 npm run read
 ```
@@ -28,4 +28,4 @@ Use `npm run comments` to list reader comments saved in
 - Snippet directives read from the XjMVVM repository root by default.
 - Set `XJMVVM_REPO_READ` or `XJMVVM_REPO_HOST` only when the source root or
   VS Code jump-link root differs.
-
+- GitHub Pages publishing is handled by `.github/workflows/docs-pages.yml`.

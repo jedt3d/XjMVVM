@@ -26,15 +26,28 @@ Use GitHub best practice for changes:
   IDE state changes,
 - open a pull request for review before merging to `main`.
 
-## Candidate Publish Paths
+## Publishing Path
 
-The first recommended path is GitHub Pages from this same repository:
+The docs publish from GitHub Actions:
 
-- source: `main` branch,
-- folder: `/docs/site` if GitHub Pages supports the selected folder layout, or
-- a `gh-pages` branch populated from `docs/site` if a root-only Pages branch is
-  cleaner.
+- workflow: `.github/workflows/docs-pages.yml`
+- source branch: `main`
+- build command: `cd docs && npm ci && npm run build`
+- published artifact: `docs/site`
+- Pages environment: `github-pages`
 
-Do not publish automatically until the repository owner chooses the Pages
-layout. The current implementation cycle only proves that the site builds and
-can be reviewed locally.
+The workflow uses GitHub's Pages artifact deployment flow instead of a
+`gh-pages` branch. That keeps the published output tied to the CI run that
+built and uploaded it.
+
+## CI Gates
+
+Pull requests and pushes to `main` run `.github/workflows/ci.yml`, which checks:
+
+- docs dependency install and static build,
+- lightweight Xojo text-project structure through `tools/xojo_text_scan.py`,
+- public stock PocketBase CRUD smoke,
+- production PocketBase owner-rule smoke.
+
+Local Xojo Analyze remains the compiler gate because hosted GitHub runners do
+not include the Xojo IDE.

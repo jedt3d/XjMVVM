@@ -5,6 +5,8 @@ A production-ready server-side rendered (SSR) MVVM web framework built on Xojo W
 [![GitHub License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![Xojo](https://img.shields.io/badge/Xojo-2025r3.1-blue)](https://www.xojo.com)
 [![Version](https://img.shields.io/github/v/tag/Jedt3D/XjMVVM?label=version&color=green)](CHANGELOG.md)
+[![CI](https://github.com/jedt3d/XjMVVM/actions/workflows/ci.yml/badge.svg)](https://github.com/jedt3d/XjMVVM/actions/workflows/ci.yml)
+[![Docs Pages](https://github.com/jedt3d/XjMVVM/actions/workflows/docs-pages.yml/badge.svg)](https://github.com/jedt3d/XjMVVM/actions/workflows/docs-pages.yml)
 
 ## Quick Start
 
@@ -25,7 +27,7 @@ open mvvm.xojo_project
 - username : admin
 - password : password
 
-**Documentation:** Full [developer guide](https://github.com/Jedt3D/XjMVVM/tree/main/developer-guide) with 60 pages in English, Thai, and Japanese.
+**Documentation:** Full [developer guide](https://github.com/Jedt3D/XjMVVM/tree/main/developer-guide) with 60 pages in English, Thai, and Japanese. The production reboot notebook publishes from `docs/site` through GitHub Pages at [jedt3d.github.io/XjMVVM](https://jedt3d.github.io/XjMVVM/).
 
 ---
 
