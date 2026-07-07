@@ -2,6 +2,14 @@
 
 All notable changes to the MVVM project are documented here. Versions follow [Semantic Versioning](https://semver.org).
 
+## [1.1.1] — 2026-07-08
+
+### Fixed
+
+- **Xojo app version metadata** — reconciled `mvvm.xojo_project` release fields with the Git tag so `MajorVersion`, `MinorVersion`, `SubVersion`, `InfoVersion`, `LongVersion`, and `ShortVersion` all represent `1.1.1`.
+
+---
+
 ## [1.1.0] — 2026-07-08
 
 ### Summary
