@@ -4,7 +4,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
-import hljs from "highlight.js";
+import { highlightCode, langForPath } from "./highlighting.mjs";
 
 // READ_ROOT: where the build reads source from. By default this is the XjMVVM
 // repository root, one level above docs/. Override with XJMVVM_REPO_READ.
@@ -12,15 +12,6 @@ import hljs from "highlight.js";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const READ_ROOT = process.env.XJMVVM_REPO_READ || resolve(HERE, "../..");
 const HOST_ROOT = process.env.XJMVVM_REPO_HOST || READ_ROOT;
-
-const LANG_BY_EXT = { ts: "typescript", tsx: "typescript", js: "javascript", mjs: "javascript",
-  json: "json", md: "markdown", sh: "bash", bash: "bash", zsh: "bash", dot: "dot", css: "css",
-  html: "xml", xojo_code: "plaintext", xojo_project: "plaintext", xojo_window: "plaintext" };
-
-function langFor(path) {
-  const ext = path.split(".").pop().toLowerCase();
-  return LANG_BY_EXT[ext] || "plaintext";
-}
 
 // Split highlight.js output into per-line HTML, re-opening any spans that cross a newline.
 function splitHighlighted(html) {
@@ -69,13 +60,7 @@ export function renderSnippet(relPath, range, caption = "") {
   const full = readFileSync(`${READ_ROOT}/${relPath}`, "utf8").split("\n");
   const slice = dedent(full.slice(start - 1, end)).join("\n");
 
-  const lang = langFor(relPath);
-  let highlighted;
-  try {
-    highlighted = hljs.highlight(slice, { language: lang, ignoreIllegals: true }).value;
-  } catch {
-    highlighted = slice.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  }
+  const { html: highlighted, language: lang } = highlightCode(slice, langForPath(relPath));
   const rows = splitHighlighted(highlighted)
     .map((l) => `<span class="cl">${l.length ? l : "&nbsp;"}</span>`)
     .join("");

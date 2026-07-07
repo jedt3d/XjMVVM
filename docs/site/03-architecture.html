@@ -102,6 +102,9 @@ blockquote{ margin:1.4em 0; padding:.2em 1.1em; border-left:3px solid var(--acce
 .snip-body{ overflow-x:auto; }
 pre.code{ margin:0; padding:12px 0; font-family:var(--mono); font-size:13.5px; line-height:1.62; background:var(--code-bg); color:#797978; }
 pre.code code{ display:block; }
+pre.code.fence{ margin:1.25em 0; padding:14px 16px; overflow-x:auto; border:1px solid var(--line); border-radius:12px;
+  box-shadow:0 1px 2px rgba(15,23,42,.04); }
+pre.code.fence code{ white-space:pre; }
 .code .cl{ display:block; white-space:pre; padding:0 16px 0 0; }
 .code .cl::before{ content:counter(ln); counter-increment:ln; display:inline-block;
   width:3.2ch; margin-right:16px; padding-right:10px; text-align:right; color:var(--gutter);
@@ -469,16 +472,15 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
 </ul>
 <h2>Dependency Rule</h2>
 <p>The rule is simple enough to enforce during review:</p>
-<pre><code class="language-text">Core must not import Backends.
+<pre class="code fence lang-text"><code>Core must not import Backends.
 Core must not import Composition.
 Backends may import Core contracts and models.
 Composition may import Core and Backends.
-Desktop UI may import Composition and Core ViewModels.
-</code></pre>
+Desktop UI may import Composition and Core ViewModels.</code></pre>
 <p>When this rule is kept, a new repository can be added without changing the ViewModel. A new screen can be built without adding persistence code to event handlers.</p>
 <h2>Project Shape</h2>
 <p>The main production path is:</p>
-<pre><code class="language-text">Core/
+<pre class="code fence lang-text"><code>Core/
   Models/
   Repositories/
   Validation/
@@ -493,8 +495,7 @@ Backends/
 Composition/
   CustomerBackendSettings
   CustomerDesktopAppContext
-  CustomerRepositoryFactory
-</code></pre>
+  CustomerRepositoryFactory</code></pre>
 <p>The test project exercises the same files. The docs build quotes these files directly, so guide snippets should fail visibly if the source moves or disappears.</p>
 <h2>Cross-Platform Meaning</h2>
 <p>The framework is desktop-first today. That does not mean the MVVM shape is desktop-only.</p>

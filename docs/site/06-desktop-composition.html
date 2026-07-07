@@ -102,6 +102,9 @@ blockquote{ margin:1.4em 0; padding:.2em 1.1em; border-left:3px solid var(--acce
 .snip-body{ overflow-x:auto; }
 pre.code{ margin:0; padding:12px 0; font-family:var(--mono); font-size:13.5px; line-height:1.62; background:var(--code-bg); color:#797978; }
 pre.code code{ display:block; }
+pre.code.fence{ margin:1.25em 0; padding:14px 16px; overflow-x:auto; border:1px solid var(--line); border-radius:12px;
+  box-shadow:0 1px 2px rgba(15,23,42,.04); }
+pre.code.fence code{ white-space:pre; }
 .code .cl{ display:block; white-space:pre; padding:0 16px 0 0; }
 .code .cl::before{ content:counter(ln); counter-increment:ln; display:inline-block;
   width:3.2ch; margin-right:16px; padding-right:10px; text-align:right; color:var(--gutter);
@@ -380,58 +383,53 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
     <span class="snip-cap">CustomerDesktopAppContext configures the selected backend and creates ViewModels.</span>
     <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
   </figcaption>
-  <div class="snip-body"><pre class="code lang-plaintext" style="counter-reset: ln 2;"><code><span class="cl">#tag Method, Flags = &amp;h0</span><span class="cl">	Sub Constructor(settings As CustomerBackendSettings)</span><span class="cl">	  If settings = Nil Then</span><span class="cl">	    mSettings = CustomerBackendSettings.Fake()</span><span class="cl">	  Else</span><span class="cl">	    mSettings = settings</span><span class="cl">	  End If</span><span class="cl">&nbsp;</span><span class="cl">	  ConfigureRepository()</span><span class="cl">	End Sub</span><span class="cl">#tag EndMethod</span><span class="cl">&nbsp;</span><span class="cl">#tag Method, Flags = &amp;h0</span><span class="cl">	Sub Close()</span><span class="cl">	  If mRepository IsA CustomerRepositorySQLite Then</span><span class="cl">	    CustomerRepositorySQLite(mRepository).Close()</span><span class="cl">	  ElseIf mRepository IsA CustomerRepositorySQL Then</span><span class="cl">	    CustomerRepositorySQL(mRepository).Close()</span><span class="cl">	  End If</span><span class="cl">	End Sub</span><span class="cl">#tag EndMethod</span><span class="cl">&nbsp;</span><span class="cl">#tag Method, Flags = &amp;h0</span><span class="cl">	Function DetailViewModel() As CustomerDetailViewModel</span><span class="cl">	  Return New CustomerDetailViewModel(mRepository)</span><span class="cl">	End Function</span><span class="cl">#tag EndMethod</span><span class="cl">&nbsp;</span><span class="cl">#tag Method, Flags = &amp;h0</span><span class="cl">	Function ListViewModel() As CustomerListViewModel</span><span class="cl">	  Return New CustomerListViewModel(mRepository)</span><span class="cl">	End Function</span><span class="cl">#tag EndMethod</span><span class="cl">&nbsp;</span><span class="cl">#tag Method, Flags = &amp;h0</span><span class="cl">	Function Repository() As ICustomerRepository</span><span class="cl">	  Return mRepository</span><span class="cl">	End Function</span><span class="cl">#tag EndMethod</span><span class="cl">&nbsp;</span><span class="cl">#tag Method, Flags = &amp;h21</span><span class="cl">	Private Sub ConfigureRepository()</span><span class="cl">	  StatusMessage = &quot;&quot;</span><span class="cl">&nbsp;</span><span class="cl">	  Select Case mSettings.Mode</span><span class="cl">	  Case &quot;fake&quot;</span><span class="cl">	    mRepository = CustomerRepositoryFactory.NewFake()</span><span class="cl">	    StatusMessage = &quot;Customer backend: fake&quot;</span><span class="cl">	  Case &quot;sqlite-file&quot;</span><span class="cl">	    mRepository = CustomerRepositoryFactory.NewSQLiteFile(mSettings.SQLiteDatabaseFile)</span><span class="cl">	    StatusMessage = &quot;Customer backend: SQLite file&quot;</span><span class="cl">	  Case &quot;sql&quot;</span><span class="cl">	    mRepository = CustomerRepositoryFactory.NewSQL(mSettings.SQLDatabase, mSettings.SQLDialect, mSettings.OwnsSQLConnection)</span><span class="cl">	    StatusMessage = &quot;Customer backend: direct SQL&quot;</span><span class="cl">	  Case &quot;pocketbase&quot;</span><span class="cl">	    mRepository = CustomerRepositoryFactory.NewPocketBase(mSettings.PocketBaseURL, mSettings.PocketBaseAuthToken, mSettings.PocketBaseCollection, mSettings.PocketBaseTimeoutSeconds)</span><span class="cl">	    StatusMessage = &quot;Customer backend: PocketBase&quot;</span><span class="cl">	  Else</span><span class="cl">	    mRepository = CustomerRepositoryFactory.NewFake()</span><span class="cl">	    StatusMessage = &quot;Unknown customer backend mode; using fake&quot;</span><span class="cl">	  End Select</span><span class="cl">	End Sub</span></code></pre></div>
+  <div class="snip-body"><pre class="code lang-xojo" style="counter-reset: ln 2;"><code><span class="cl"><span class="hljs-meta">#tag</span> Method, Flags = <span class="hljs-number">&amp;h0</span></span><span class="cl">	<span class="hljs-keyword">Sub</span> Constructor(settings <span class="hljs-keyword">As</span> CustomerBackendSettings)</span><span class="cl">	  <span class="hljs-keyword">If</span> settings = <span class="hljs-literal">Nil</span> <span class="hljs-keyword">Then</span></span><span class="cl">	    mSettings = CustomerBackendSettings.Fake()</span><span class="cl">	  <span class="hljs-keyword">Else</span></span><span class="cl">	    mSettings = settings</span><span class="cl">	  <span class="hljs-keyword">End</span> <span class="hljs-keyword">If</span></span><span class="cl">&nbsp;</span><span class="cl">	  ConfigureRepository()</span><span class="cl">	<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></span><span class="cl"><span class="hljs-meta">#tag</span> EndMethod</span><span class="cl">&nbsp;</span><span class="cl"><span class="hljs-meta">#tag</span> Method, Flags = <span class="hljs-number">&amp;h0</span></span><span class="cl">	<span class="hljs-keyword">Sub</span> Close()</span><span class="cl">	  <span class="hljs-keyword">If</span> mRepository <span class="hljs-keyword">IsA</span> CustomerRepositorySQLite <span class="hljs-keyword">Then</span></span><span class="cl">	    CustomerRepositorySQLite(mRepository).Close()</span><span class="cl">	  <span class="hljs-keyword">ElseIf</span> mRepository <span class="hljs-keyword">IsA</span> CustomerRepositorySQL <span class="hljs-keyword">Then</span></span><span class="cl">	    CustomerRepositorySQL(mRepository).Close()</span><span class="cl">	  <span class="hljs-keyword">End</span> <span class="hljs-keyword">If</span></span><span class="cl">	<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></span><span class="cl"><span class="hljs-meta">#tag</span> EndMethod</span><span class="cl">&nbsp;</span><span class="cl"><span class="hljs-meta">#tag</span> Method, Flags = <span class="hljs-number">&amp;h0</span></span><span class="cl">	<span class="hljs-keyword">Function</span> DetailViewModel() <span class="hljs-keyword">As</span> CustomerDetailViewModel</span><span class="cl">	  <span class="hljs-keyword">Return</span> <span class="hljs-keyword">New</span> CustomerDetailViewModel(mRepository)</span><span class="cl">	<span class="hljs-keyword">End</span> <span class="hljs-keyword">Function</span></span><span class="cl"><span class="hljs-meta">#tag</span> EndMethod</span><span class="cl">&nbsp;</span><span class="cl"><span class="hljs-meta">#tag</span> Method, Flags = <span class="hljs-number">&amp;h0</span></span><span class="cl">	<span class="hljs-keyword">Function</span> ListViewModel() <span class="hljs-keyword">As</span> CustomerListViewModel</span><span class="cl">	  <span class="hljs-keyword">Return</span> <span class="hljs-keyword">New</span> CustomerListViewModel(mRepository)</span><span class="cl">	<span class="hljs-keyword">End</span> <span class="hljs-keyword">Function</span></span><span class="cl"><span class="hljs-meta">#tag</span> EndMethod</span><span class="cl">&nbsp;</span><span class="cl"><span class="hljs-meta">#tag</span> Method, Flags = <span class="hljs-number">&amp;h0</span></span><span class="cl">	<span class="hljs-keyword">Function</span> Repository() <span class="hljs-keyword">As</span> ICustomerRepository</span><span class="cl">	  <span class="hljs-keyword">Return</span> mRepository</span><span class="cl">	<span class="hljs-keyword">End</span> <span class="hljs-keyword">Function</span></span><span class="cl"><span class="hljs-meta">#tag</span> EndMethod</span><span class="cl">&nbsp;</span><span class="cl"><span class="hljs-meta">#tag</span> Method, Flags = <span class="hljs-number">&amp;h21</span></span><span class="cl">	<span class="hljs-keyword">Private</span> <span class="hljs-keyword">Sub</span> ConfigureRepository()</span><span class="cl">	  StatusMessage = <span class="hljs-string">&quot;&quot;</span></span><span class="cl">&nbsp;</span><span class="cl">	  <span class="hljs-keyword">Select</span> <span class="hljs-keyword">Case</span> mSettings.Mode</span><span class="cl">	  <span class="hljs-keyword">Case</span> <span class="hljs-string">&quot;fake&quot;</span></span><span class="cl">	    mRepository = CustomerRepositoryFactory.NewFake()</span><span class="cl">	    StatusMessage = <span class="hljs-string">&quot;Customer backend: fake&quot;</span></span><span class="cl">	  <span class="hljs-keyword">Case</span> <span class="hljs-string">&quot;sqlite-file&quot;</span></span><span class="cl">	    mRepository = CustomerRepositoryFactory.NewSQLiteFile(mSettings.SQLiteDatabaseFile)</span><span class="cl">	    StatusMessage = <span class="hljs-string">&quot;Customer backend: SQLite file&quot;</span></span><span class="cl">	  <span class="hljs-keyword">Case</span> <span class="hljs-string">&quot;sql&quot;</span></span><span class="cl">	    mRepository = CustomerRepositoryFactory.NewSQL(mSettings.SQLDatabase, mSettings.SQLDialect, mSettings.OwnsSQLConnection)</span><span class="cl">	    StatusMessage = <span class="hljs-string">&quot;Customer backend: direct SQL&quot;</span></span><span class="cl">	  <span class="hljs-keyword">Case</span> <span class="hljs-string">&quot;pocketbase&quot;</span></span><span class="cl">	    mRepository = CustomerRepositoryFactory.NewPocketBase(mSettings.PocketBaseURL, mSettings.PocketBaseAuthToken, mSettings.PocketBaseCollection, mSettings.PocketBaseTimeoutSeconds)</span><span class="cl">	    StatusMessage = <span class="hljs-string">&quot;Customer backend: PocketBase&quot;</span></span><span class="cl">	  <span class="hljs-keyword">Else</span></span><span class="cl">	    mRepository = CustomerRepositoryFactory.NewFake()</span><span class="cl">	    StatusMessage = <span class="hljs-string">&quot;Unknown customer backend mode; using fake&quot;</span></span><span class="cl">	  <span class="hljs-keyword">End</span> <span class="hljs-keyword">Select</span></span><span class="cl">	<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></span></code></pre></div>
 </figure>
 <p>This pattern prevents every Window from constructing its own backend client.</p>
 <h2>Suggested Desktop Startup</h2>
 <p>In a real desktop app, build the context once during startup or after login:</p>
-<pre><code class="language-xojo">Sub Opening()
-  Var dbFile As FolderItem = SpecialFolder.ApplicationData.Child(&quot;XjMVVM&quot;).Child(&quot;customers.sqlite&quot;)
-  Var settings As CustomerBackendSettings = CustomerBackendSettings.SQLiteFile(dbFile)
+<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> Opening()
+  <span class="hljs-keyword">Var</span> dbFile <span class="hljs-keyword">As</span> <span class="hljs-type">FolderItem</span> = <span class="hljs-built_in">SpecialFolder</span>.ApplicationData.Child(<span class="hljs-string">&quot;XjMVVM&quot;</span>).Child(<span class="hljs-string">&quot;customers.sqlite&quot;</span>)
+  <span class="hljs-keyword">Var</span> settings <span class="hljs-keyword">As</span> CustomerBackendSettings = CustomerBackendSettings.SQLiteFile(dbFile)
 
-  mCustomerContext = New CustomerDesktopAppContext(settings)
+  mCustomerContext = <span class="hljs-keyword">New</span> CustomerDesktopAppContext(settings)
   System.DebugLog(mCustomerContext.StatusMessage)
-End Sub
-</code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
 <p>After a successful PocketBase login, the same app can switch to the REST backend:</p>
-<pre><code class="language-xojo">Sub UseServerBackend(session As PocketBaseAuthSession)
-  Var settings As CustomerBackendSettings
-  settings = CustomerBackendSettings.PocketBase(&quot;https://api.example.com&quot;, session.Token, &quot;customers&quot;, 30)
+<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> UseServerBackend(session <span class="hljs-keyword">As</span> PocketBaseAuthSession)
+  <span class="hljs-keyword">Var</span> settings <span class="hljs-keyword">As</span> CustomerBackendSettings
+  settings = CustomerBackendSettings.PocketBase(<span class="hljs-string">&quot;https://api.example.com&quot;</span>, session.Token, <span class="hljs-string">&quot;customers&quot;</span>, <span class="hljs-number">30</span>)
 
-  If mCustomerContext &lt;&gt; Nil Then mCustomerContext.Close()
-  mCustomerContext = New CustomerDesktopAppContext(settings)
-End Sub
-</code></pre>
+  <span class="hljs-keyword">If</span> mCustomerContext &lt;&gt; <span class="hljs-literal">Nil</span> <span class="hljs-keyword">Then</span> mCustomerContext.Close()
+  mCustomerContext = <span class="hljs-keyword">New</span> CustomerDesktopAppContext(settings)
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
 <h2>Window Binding</h2>
 <p>Create ViewModels from the app context:</p>
-<pre><code class="language-xojo">Sub CustomerListWindow_Opening()
-  mListVM = App.CustomerContext.ListViewModel()
-  mListVM.LoadPage(1, 50)
+<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> CustomerListWindow_Opening()
+  mListVM = <span class="hljs-built_in">App</span>.CustomerContext.ListViewModel()
+  mListVM.LoadPage(<span class="hljs-number">1</span>, <span class="hljs-number">50</span>)
   RenderCustomers(mListVM.Customers())
-End Sub
-</code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
 <p>For an edit window:</p>
-<pre><code class="language-xojo">Sub CustomerEditor_Opening(customerID As String)
-  mDetailVM = App.CustomerContext.DetailViewModel()
+<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> CustomerEditor_Opening(customerID <span class="hljs-keyword">As</span> <span class="hljs-type">String</span>)
+  mDetailVM = <span class="hljs-built_in">App</span>.CustomerContext.DetailViewModel()
   mDetailVM.Load(customerID)
 
-  Var c As Customer = mDetailVM.Current()
-  If c &lt;&gt; Nil Then
+  <span class="hljs-keyword">Var</span> c <span class="hljs-keyword">As</span> Customer = mDetailVM.Current()
+  <span class="hljs-keyword">If</span> c &lt;&gt; <span class="hljs-literal">Nil</span> <span class="hljs-keyword">Then</span>
     FirstNameField.Text = c.FirstName
     LastNameField.Text = c.LastName
     EmailField.Text = c.Email
-  End If
-End Sub
-</code></pre>
+  <span class="hljs-keyword">End</span> <span class="hljs-keyword">If</span>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
 <h2>Shutdown</h2>
 <p>Call <code>Close()</code> when the app changes backend or quits. This lets SQLite and direct SQL repositories close owned connections.</p>
-<pre><code class="language-xojo">Sub Closing()
-  If mCustomerContext &lt;&gt; Nil Then
+<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> Closing()
+  <span class="hljs-keyword">If</span> mCustomerContext &lt;&gt; <span class="hljs-literal">Nil</span> <span class="hljs-keyword">Then</span>
     mCustomerContext.Close()
-    mCustomerContext = Nil
-  End If
-End Sub
-</code></pre>
+    mCustomerContext = <span class="hljs-literal">Nil</span>
+  <span class="hljs-keyword">End</span> <span class="hljs-keyword">If</span>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
 <p>That lifecycle matters in cross-platform desktop apps because file locks and connection cleanup differ by operating system.</p>
 
 <nav class="chnav"><a class="prev" href="05-backend-options.html"><span class="dir">← Previous</span><span class="t">Backend Options</span></a><a class="next" href="07-pocketbase-production.html"><span class="dir">Next →</span><span class="t">PocketBase Production</span></a></nav>
