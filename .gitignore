@@ -195,6 +195,9 @@ test.log
 
 # Crash dumps
 core
+# Keep the intentional XjMVVM Core source folder trackable on case-insensitive macOS filesystems.
+!/Core/
+!/Core/**
 *.stackdump
 
 ################################################################################

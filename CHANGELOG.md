@@ -2,6 +2,24 @@
 
 All notable changes to the MVVM project are documented here. Versions follow [Semantic Versioning](https://semver.org).
 
+## [1.1.0] — 2026-07-08
+
+### Summary
+
+**XjMVVM reboot foundation.** Adds the Pi-style reboot documentation system, a clean Customer MVVM core slice, and the first transport-injected PocketBase repository proof for the shared Customer repository boundary.
+
+### Added
+
+- **Pi-style reboot docs** — new `docs/` reader/build scaffold with implementation-cycle, MVVM core, PocketBase loop, and adapter-proof chapters.
+- **Customer MVVM core** — `Customer` model, validation, fake repository, shared list/detail ViewModels, and XojoUnit coverage.
+- **PocketBase adapter proof** — `PocketBaseClient`, query/response/mapping helpers, transport interface, fake transport, and `CustomerRepositoryPocketBase` behind `ICustomerRepository`.
+
+### Changed
+
+- **Customer identity contract** — `Customer.ID` and `ICustomerRepository` lookup/delete IDs now use `String` so PocketBase record IDs, SQLite row IDs, and direct database IDs can share one repository interface.
+
+---
+
 ## [1.0.0] — 2026-03-17
 
 ### Summary

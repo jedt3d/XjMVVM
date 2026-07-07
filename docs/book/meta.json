@@ -1,0 +1,44 @@
+{
+  "lang": "en",
+  "brand": "XjMVVM Docs",
+  "title": "XjMVVM Production Reboot",
+  "subtitle": "A source-backed implementation notebook for one-repo MVVM, PocketBase, SQLite, and desktop-first Xojo apps",
+  "version": "PocketBase adapter proof · 2026-07-08",
+  "parts": [
+    {
+      "label": "Part 1",
+      "title": "Implementation Cycle",
+      "desc": "The first visible slice: documentation system, architecture boundary, and backend loop.",
+      "chapters": [
+        {
+          "num": "1",
+          "slug": "01-implementation-cycle",
+          "title": "First Implementation Cycle",
+          "sub": "How the reboot starts without disturbing the existing Xojo source",
+          "file": "01-implementation-cycle.md"
+        },
+        {
+          "num": "2",
+          "slug": "02-mvvm-core-map",
+          "title": "MVVM Core Map",
+          "sub": "Shared ViewModels and repository interfaces across desktop and mobile",
+          "file": "02-mvvm-core-map.md"
+        },
+        {
+          "num": "3",
+          "slug": "03-pocketbase-loop",
+          "title": "PocketBase Loop",
+          "sub": "Stock PocketBase as the default REST backend adapter target",
+          "file": "03-pocketbase-loop.md"
+        },
+        {
+          "num": "4",
+          "slug": "04-pocketbase-adapter-proof",
+          "title": "PocketBase Adapter Proof",
+          "sub": "A compile-checked REST repository path behind the shared Customer ViewModels",
+          "file": "04-pocketbase-adapter-proof.md"
+        }
+      ]
+    }
+  ]
+}
