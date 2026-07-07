@@ -581,7 +581,8 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
 // • Click a highlight → only that thread. Click the gutter number → all threads in the block.
 (function () {
   const SLUG = document.body.dataset.slug;
-  if (!SLUG) return;
+  const IS_CONTENTS_PAGE = document.body.classList.contains("contents");
+  if (!SLUG && !IS_CONTENTS_PAGE) return;
   const SEL = ".prose > p, .prose > h2, .prose > h3, .prose > blockquote, .prose > ul, .prose > ol, .prose > figure, .prose > .note";
   const prose = document.querySelector(".prose");
   const isFigure = (b) => b.tagName === "FIGURE";
@@ -881,9 +882,23 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
     addComposer(card, "คอมเมนต์บล็อก “" + label + "” นี้…", async (v) => { await postComment(anchor, label, v, null, null, "node", nid); rerender(); openDiagramNode(fig, findNode(fig, nid) || g); });
   }
 
+  function isContentsPage() {
+    return IS_CONTENTS_PAGE;
+  }
+
+  function showReadOnlyHint() {
+    if (!isContentsPage()) return;
+    const h = document.createElement("div");
+    h.className = "reader-off";
+    h.innerHTML = 'โหมดอ่านอย่างเดียว — รัน <code>npm run read</code> เพื่อคอมเมนต์';
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 6000);
+  }
+
   async function init() {
     let ok = false; try { ok = (await api("ping")).ok; } catch { ok = false; }
-    if (!ok) { const h = document.createElement("div"); h.className = "reader-off"; h.innerHTML = 'โหมดอ่านอย่างเดียว — รัน <code>npm run read</code> เพื่อคอมเมนต์'; document.body.appendChild(h); setTimeout(() => h.remove(), 6000); return; }
+    if (!ok) { showReadOnlyHint(); return; }
+    if (!SLUG) return;
     document.body.classList.add("reader");
     anchorBlocks();
     const { comments } = await api("comments?chapter=" + encodeURIComponent(SLUG));
