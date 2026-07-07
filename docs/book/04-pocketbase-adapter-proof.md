@@ -17,6 +17,8 @@ The PocketBase slice lives under `Backends/PocketBase`:
 - `CustomerRepositoryPocketBase` implements `ICustomerRepository`.
 - `FakePocketBaseTransport` lets XojoUnit tests prove the adapter without a live
   server.
+- `PocketBaseURLConnectionTransport` is the concrete Xojo HTTP transport for
+  runtime use.
 
 The repository uses the stock PocketBase record endpoints:
 
@@ -40,14 +42,19 @@ The new `PocketBaseCustomerRepositoryTests` group proves these adapter behaviors
 The existing `CustomerCoreTests` still cover the shared ViewModels through the
 fake repository after the ID contract changed from integer to string.
 
-## What Is Not Yet Proven
+## What Is Now Proven
 
-This cycle does not yet prove a live network call from Xojo to PocketBase. The
-next implementation cycle should add a concrete `URLConnection` transport and a
-developer smoke script that:
+Cycle 3 adds the concrete `PocketBaseURLConnectionTransport`, and
+`tools/pocketbase_smoke.py` proves the stock PocketBase side by:
 
 1. starts stock PocketBase locally
 2. creates or migrates the `customers` collection
-3. authenticates with a test user or service account
-4. runs list/create/update/delete through `CustomerRepositoryPocketBase`
-5. records the exact PocketBase version and collection rules used for the test
+3. runs create/list/view/update/delete through the records API
+4. records the exact PocketBase version and temporary base URL used for the test
+
+## What Is Not Yet Proven
+
+A full live Xojo runtime call still needs a smoke path that runs
+`CustomerRepositoryPocketBase` with `PocketBaseURLConnectionTransport` against
+that stock PocketBase process, including a real auth flow once production
+collection rules are chosen.

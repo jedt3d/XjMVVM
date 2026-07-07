@@ -3,7 +3,7 @@
   "brand": "XjMVVM Docs",
   "title": "XjMVVM Production Reboot",
   "subtitle": "A source-backed implementation notebook for one-repo MVVM, PocketBase, SQLite, and desktop-first Xojo apps",
-  "version": "PocketBase adapter proof · 2026-07-08",
+  "version": "Desktop and direct database proof · 2026-07-08",
   "parts": [
     {
       "label": "Part 1",
@@ -37,6 +37,55 @@
           "title": "PocketBase Adapter Proof",
           "sub": "A compile-checked REST repository path behind the shared Customer ViewModels",
           "file": "04-pocketbase-adapter-proof.md"
+        },
+        {
+          "num": "5",
+          "slug": "05-urlconnection-transport",
+          "title": "URLConnection Transport",
+          "sub": "Concrete Xojo HTTP transport for the PocketBase repository adapter",
+          "file": "05-urlconnection-transport.md"
+        },
+        {
+          "num": "6",
+          "slug": "06-pocketbase-smoke-harness",
+          "title": "PocketBase Smoke Harness",
+          "sub": "Disposable stock PocketBase proof for the Customer records contract",
+          "file": "06-pocketbase-smoke-harness.md"
+        },
+        {
+          "num": "7",
+          "slug": "07-sqlite-customer-repository",
+          "title": "SQLite Customer Repository",
+          "sub": "Local Customer persistence behind the same MVVM repository contract",
+          "file": "07-sqlite-customer-repository.md"
+        },
+        {
+          "num": "8",
+          "slug": "08-repository-composition",
+          "title": "Repository Composition",
+          "sub": "Factory helpers that choose fake, SQLite, or PocketBase adapters at the app boundary",
+          "file": "08-repository-composition.md"
+        },
+        {
+          "num": "9",
+          "slug": "09-production-pocketbase",
+          "title": "Production PocketBase",
+          "sub": "Authenticated owner-only Customer schema, rules, smoke proof, and Xojo auth helpers",
+          "file": "09-production-pocketbase.md"
+        },
+        {
+          "num": "10",
+          "slug": "10-desktop-app-integration",
+          "title": "Desktop App Integration",
+          "sub": "A startup composition context for desktop apps choosing Customer backends",
+          "file": "10-desktop-app-integration.md"
+        },
+        {
+          "num": "11",
+          "slug": "11-direct-database-expansion",
+          "title": "Direct Database Expansion",
+          "sub": "Generic direct-SQL Customer repository support for Xojo Database drivers",
+          "file": "11-direct-database-expansion.md"
         }
       ]
     }

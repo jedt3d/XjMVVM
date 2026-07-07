@@ -17,6 +17,7 @@ Protected Module PocketBaseRecordMapper
 
 		  Var c As New Customer()
 		  c.ID = FieldString(record, "id")
+		  c.OwnerID = FieldString(record, "owner")
 		  c.FirstName = FieldString(record, "first_name")
 		  c.LastName = FieldString(record, "last_name")
 		  c.Email = FieldString(record, "email")
@@ -33,6 +34,7 @@ Protected Module PocketBaseRecordMapper
 		  If c = Nil Then Return d
 
 		  If c.ID.Trim() <> "" Then d.Value("id") = c.ID
+		  If c.OwnerID.Trim() <> "" Then d.Value("owner") = c.OwnerID
 		  d.Value("first_name") = c.FirstName
 		  d.Value("last_name") = c.LastName
 		  d.Value("email") = c.Email
