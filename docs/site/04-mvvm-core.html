@@ -96,6 +96,8 @@ blockquote{ margin:1.4em 0; padding:.2em 1.1em; border-left:3px solid var(--acce
 .snip-loc{ display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:12.5px;
   color:var(--accent); text-decoration:none; padding:2px 6px; border-radius:6px; }
 .snip-loc:hover{ background:var(--accent-soft); text-decoration:none; }
+.snip-label{ color:var(--ink-soft); cursor:default; font-weight:600; }
+.snip-label:hover{ background:transparent; }
 .snip-ic{ width:13px; height:13px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
 .snip-path{ font-weight:600; } .snip-lines{ opacity:.7; }
 .snip-cap{ font-family:var(--body); font-size:13px; color:var(--muted); }
@@ -105,6 +107,7 @@ pre.code code{ display:block; }
 pre.code.fence{ margin:1.25em 0; padding:14px 16px; overflow-x:auto; border:1px solid var(--line); border-radius:12px;
   box-shadow:0 1px 2px rgba(15,23,42,.04); }
 pre.code.fence code{ white-space:pre; }
+.snippet-fence pre.code.fence{ margin:0; border:0; border-radius:0; box-shadow:none; }
 .code .cl{ display:block; white-space:pre; padding:0 16px 0 0; }
 .code .cl::before{ content:counter(ln); counter-increment:ln; display:inline-block;
   width:3.2ch; margin-right:16px; padding-right:10px; text-align:right; color:var(--gutter);
@@ -371,7 +374,12 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
   <div class="snip-body"><pre class="code lang-xojo" style="counter-reset: ln 34;"><code><span class="cl"><span class="hljs-meta">#tag</span> Method, Flags = <span class="hljs-number">&amp;h0</span></span><span class="cl">	<span class="hljs-keyword">Function</span> Save(c <span class="hljs-keyword">As</span> Customer) <span class="hljs-keyword">As</span> <span class="hljs-type">Boolean</span></span><span class="cl">	  StatusMessage = <span class="hljs-string">&quot;&quot;</span></span><span class="cl">&nbsp;</span><span class="cl">	  <span class="hljs-keyword">If</span> mRepository = <span class="hljs-literal">Nil</span> <span class="hljs-keyword">Then</span></span><span class="cl">	    StatusMessage = <span class="hljs-string">&quot;No customer repository&quot;</span></span><span class="cl">	    <span class="hljs-keyword">Return</span> <span class="hljs-literal">False</span></span><span class="cl">	  <span class="hljs-keyword">End</span> <span class="hljs-keyword">If</span></span><span class="cl">&nbsp;</span><span class="cl">	  <span class="hljs-keyword">Var</span> validation <span class="hljs-keyword">As</span> ValidationResult = CustomerValidator.Validate(c)</span><span class="cl">	  <span class="hljs-keyword">If</span> <span class="hljs-keyword">Not</span> validation.IsValid() <span class="hljs-keyword">Then</span></span><span class="cl">	    StatusMessage = validation.Summary()</span><span class="cl">	    <span class="hljs-keyword">Return</span> <span class="hljs-literal">False</span></span><span class="cl">	  <span class="hljs-keyword">End</span> <span class="hljs-keyword">If</span></span><span class="cl">&nbsp;</span><span class="cl">	  mCustomer = mRepository.Save(c)</span><span class="cl">	  <span class="hljs-keyword">If</span> mCustomer = <span class="hljs-literal">Nil</span> <span class="hljs-keyword">Then</span></span><span class="cl">	    StatusMessage = <span class="hljs-string">&quot;Customer save failed&quot;</span></span><span class="cl">	    <span class="hljs-keyword">Return</span> <span class="hljs-literal">False</span></span><span class="cl">	  <span class="hljs-keyword">End</span> <span class="hljs-keyword">If</span></span><span class="cl">&nbsp;</span><span class="cl">	  StatusMessage = <span class="hljs-string">&quot;Saved customer &quot;</span> + mCustomer.ID</span><span class="cl">	  <span class="hljs-keyword">Return</span> <span class="hljs-literal">True</span></span><span class="cl">	<span class="hljs-keyword">End</span> <span class="hljs-keyword">Function</span></span></code></pre></div>
 </figure>
 <p>This is the core pattern for every business edit screen:</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Function</span> SaveButtonPressed() <span class="hljs-keyword">As</span> <span class="hljs-type">Boolean</span>
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Function</span> SaveButtonPressed() <span class="hljs-keyword">As</span> <span class="hljs-type">Boolean</span>
   <span class="hljs-keyword">Var</span> c <span class="hljs-keyword">As</span> <span class="hljs-keyword">New</span> Customer(FirstNameField.Text, LastNameField.Text, EmailField.Text)
   c.ID = mCurrentCustomerID
   c.OwnerID = mCurrentOwnerID
@@ -383,11 +391,17 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
 
   StatusLabel.Text = mDetailVM.StatusMessage
   <span class="hljs-keyword">Return</span> <span class="hljs-literal">True</span>
-<span class="hljs-keyword">End</span> <span class="hljs-keyword">Function</span></code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Function</span></code></pre></div>
+</figure>
 <p>The button handler reads fields, creates a model, calls the ViewModel, and displays the result. It does not decide where the record is saved.</p>
 <h2>ViewModel Testing</h2>
 <p>Because the ViewModels depend on <code>ICustomerRepository</code>, tests can use a fake repository:</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> ListViewModelLoadsFirstPageTest()
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> ListViewModelLoadsFirstPageTest()
   <span class="hljs-keyword">Var</span> repo <span class="hljs-keyword">As</span> <span class="hljs-keyword">New</span> FakeCustomerRepository()
   <span class="hljs-keyword">Var</span> vm <span class="hljs-keyword">As</span> <span class="hljs-keyword">New</span> CustomerListViewModel(repo)
 
@@ -395,7 +409,8 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
 
   Assert.AreEqual(<span class="hljs-number">2</span>, vm.Customers().Count)
   Assert.AreEqual(<span class="hljs-number">3</span>, vm.TotalCount())
-<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre></div>
+</figure>
 <p>Use this when a test is about screen behavior. Use SQLite, direct SQL, or PocketBase smokes only when the test is about the adapter or backend contract.</p>
 
 <nav class="chnav"><a class="prev" href="03-architecture.html"><span class="dir">← Previous</span><span class="t">Architecture</span></a><a class="next" href="05-backend-options.html"><span class="dir">Next →</span><span class="t">Backend Options</span></a></nav>

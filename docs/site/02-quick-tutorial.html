@@ -96,6 +96,8 @@ blockquote{ margin:1.4em 0; padding:.2em 1.1em; border-left:3px solid var(--acce
 .snip-loc{ display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:12.5px;
   color:var(--accent); text-decoration:none; padding:2px 6px; border-radius:6px; }
 .snip-loc:hover{ background:var(--accent-soft); text-decoration:none; }
+.snip-label{ color:var(--ink-soft); cursor:default; font-weight:600; }
+.snip-label:hover{ background:transparent; }
 .snip-ic{ width:13px; height:13px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
 .snip-path{ font-weight:600; } .snip-lines{ opacity:.7; }
 .snip-cap{ font-family:var(--body); font-size:13px; color:var(--muted); }
@@ -105,6 +107,7 @@ pre.code code{ display:block; }
 pre.code.fence{ margin:1.25em 0; padding:14px 16px; overflow-x:auto; border:1px solid var(--line); border-radius:12px;
   box-shadow:0 1px 2px rgba(15,23,42,.04); }
 pre.code.fence code{ white-space:pre; }
+.snippet-fence pre.code.fence{ margin:0; border:0; border-radius:0; box-shadow:none; }
 .code .cl{ display:block; white-space:pre; padding:0 16px 0 0; }
 .code .cl::before{ content:counter(ln); counter-increment:ln; display:inline-block;
   width:3.2ch; margin-right:16px; padding-right:10px; text-align:right; color:var(--gutter);
@@ -304,7 +307,12 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
 <p>The goal is to understand how an XjMVVM feature grows from business data to a desktop screen.</p>
 <h2>Step 1: Define The Model</h2>
 <p>Start with the data the business cares about:</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Protected</span> <span class="hljs-keyword">Class</span> Customer
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Protected</span> <span class="hljs-keyword">Class</span> Customer
   <span class="hljs-keyword">Property</span> ID <span class="hljs-keyword">As</span> <span class="hljs-type">String</span>
   <span class="hljs-keyword">Property</span> FirstName <span class="hljs-keyword">As</span> <span class="hljs-type">String</span>
   <span class="hljs-keyword">Property</span> LastName <span class="hljs-keyword">As</span> <span class="hljs-type">String</span>
@@ -314,7 +322,8 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
     <span class="hljs-keyword">Var</span> value <span class="hljs-keyword">As</span> <span class="hljs-type">String</span> = FirstName.Trim() + <span class="hljs-string">&quot; &quot;</span> + LastName.Trim()
     <span class="hljs-keyword">Return</span> value.Trim()
   <span class="hljs-keyword">End</span> <span class="hljs-keyword">Function</span>
-<span class="hljs-keyword">End</span> <span class="hljs-keyword">Class</span></code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Class</span></code></pre></div>
+</figure>
 <p>Things to notice:</p>
 <ul>
 <li>The model does not know about controls.</li>
@@ -323,13 +332,19 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
 </ul>
 <h2>Step 2: Define The Repository Contract</h2>
 <p>The ViewModel needs Customer data, but it should not care where that data lives.</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Protected</span> <span class="hljs-keyword">Interface</span> ICustomerRepository
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Protected</span> <span class="hljs-keyword">Interface</span> ICustomerRepository
   <span class="hljs-keyword">Function</span> FindPage(searchTerm <span class="hljs-keyword">As</span> <span class="hljs-type">String</span>, pageNumber <span class="hljs-keyword">As</span> <span class="hljs-type">Integer</span>, pageSize <span class="hljs-keyword">As</span> <span class="hljs-type">Integer</span>) <span class="hljs-keyword">As</span> Customer()
   <span class="hljs-keyword">Function</span> Count(searchTerm <span class="hljs-keyword">As</span> <span class="hljs-type">String</span>) <span class="hljs-keyword">As</span> <span class="hljs-type">Integer</span>
   <span class="hljs-keyword">Function</span> FindByID(id <span class="hljs-keyword">As</span> <span class="hljs-type">String</span>) <span class="hljs-keyword">As</span> Customer
   <span class="hljs-keyword">Function</span> Save(customer <span class="hljs-keyword">As</span> Customer) <span class="hljs-keyword">As</span> Customer
   <span class="hljs-keyword">Sub</span> Delete(id <span class="hljs-keyword">As</span> <span class="hljs-type">String</span>)
-<span class="hljs-keyword">End</span> <span class="hljs-keyword">Interface</span></code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Interface</span></code></pre></div>
+</figure>
 <p>Things to notice:</p>
 <ul>
 <li>This is business persistence language, not SQL language.</li>
@@ -339,7 +354,12 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
 <p>This interface is the seam that lets the app swap fake, SQLite, REST, and direct SQL backends.</p>
 <h2>Step 3: Write A Fake Repository First</h2>
 <p>Before building a real database adapter, use fake data to make the ViewModel and Window understandable.</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Protected</span> <span class="hljs-keyword">Class</span> FakeCustomerRepository
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Protected</span> <span class="hljs-keyword">Class</span> FakeCustomerRepository
 <span class="hljs-keyword">Implements</span> ICustomerRepository
   <span class="hljs-keyword">Private</span> mRows() <span class="hljs-keyword">As</span> Customer
 
@@ -352,7 +372,8 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
     <span class="hljs-keyword">Next</span>
     <span class="hljs-keyword">Return</span> results
   <span class="hljs-keyword">End</span> <span class="hljs-keyword">Function</span>
-<span class="hljs-keyword">End</span> <span class="hljs-keyword">Class</span></code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Class</span></code></pre></div>
+</figure>
 <p>Things to notice:</p>
 <ul>
 <li>A fake repository is not throwaway junk. It is how you test the screen behavior quickly.</li>
@@ -361,7 +382,12 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
 </ul>
 <h2>Step 4: Build The List ViewModel</h2>
 <p>Now write the code that a list window needs:</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Protected</span> <span class="hljs-keyword">Class</span> CustomerListViewModel
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Protected</span> <span class="hljs-keyword">Class</span> CustomerListViewModel
   <span class="hljs-keyword">Sub</span> Constructor(repository <span class="hljs-keyword">As</span> ICustomerRepository)
     mRepository = repository
   <span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span>
@@ -382,7 +408,8 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
     mTotalCount = mRepository.Count(SearchTerm)
     StatusMessage = <span class="hljs-string">&quot;Loaded &quot;</span> + mCustomers.Count.ToString + <span class="hljs-string">&quot; customer(s)&quot;</span>
   <span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span>
-<span class="hljs-keyword">End</span> <span class="hljs-keyword">Class</span></code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Class</span></code></pre></div>
+</figure>
 <p>Things to notice:</p>
 <ul>
 <li>The ViewModel receives the repository through its constructor.</li>
@@ -392,7 +419,12 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
 </ul>
 <h2>Step 5: Bind A Desktop Window</h2>
 <p>The Window should be a thin adapter from controls to ViewModel calls.</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> Opening()
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> Opening()
   <span class="hljs-keyword">Var</span> repo <span class="hljs-keyword">As</span> <span class="hljs-keyword">New</span> FakeCustomerRepository()
   mListVM = <span class="hljs-keyword">New</span> CustomerListViewModel(repo)
   ReloadCustomers()
@@ -408,7 +440,8 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
   <span class="hljs-keyword">Next</span>
 
   StatusLabel.Text = mListVM.StatusMessage
-<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre></div>
+</figure>
 <p>Things to notice:</p>
 <ul>
 <li>The Window does not filter rows itself.</li>
@@ -418,7 +451,12 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
 <p>This practical MVVM style works well in Xojo because it keeps the code explicit.</p>
 <h2>Step 6: Add Validation Before Save</h2>
 <p>Validation belongs near the model and ViewModel, not scattered across button handlers.</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Function</span> Save(c <span class="hljs-keyword">As</span> Customer) <span class="hljs-keyword">As</span> <span class="hljs-type">Boolean</span>
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Function</span> Save(c <span class="hljs-keyword">As</span> Customer) <span class="hljs-keyword">As</span> <span class="hljs-type">Boolean</span>
   <span class="hljs-keyword">Var</span> validation <span class="hljs-keyword">As</span> ValidationResult = CustomerValidator.Validate(c)
   <span class="hljs-keyword">If</span> <span class="hljs-keyword">Not</span> validation.IsValid() <span class="hljs-keyword">Then</span>
     StatusMessage = validation.Summary()
@@ -427,7 +465,8 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
 
   mCustomer = mRepository.Save(c)
   <span class="hljs-keyword">Return</span> mCustomer &lt;&gt; <span class="hljs-literal">Nil</span>
-<span class="hljs-keyword">End</span> <span class="hljs-keyword">Function</span></code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Function</span></code></pre></div>
+</figure>
 <p>Things to notice:</p>
 <ul>
 <li>The same validation runs regardless of backend.</li>
@@ -436,7 +475,12 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
 </ul>
 <h2>Step 7: Switch Backend At Startup</h2>
 <p>Once the ViewModel and Window work with fake data, switch the repository from one place: the composition root.</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Var</span> settings <span class="hljs-keyword">As</span> CustomerBackendSettings
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Var</span> settings <span class="hljs-keyword">As</span> CustomerBackendSettings
 
 <span class="hljs-keyword">Select</span> <span class="hljs-keyword">Case</span> BackendPopup.SelectedRowText
 <span class="hljs-keyword">Case</span> <span class="hljs-string">&quot;Local SQLite&quot;</span>
@@ -447,7 +491,8 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
   settings = CustomerBackendSettings.Fake()
 <span class="hljs-keyword">End</span> <span class="hljs-keyword">Select</span>
 
-<span class="hljs-built_in">App</span>.CustomerContext = <span class="hljs-keyword">New</span> CustomerDesktopAppContext(settings)</code></pre>
+<span class="hljs-built_in">App</span>.CustomerContext = <span class="hljs-keyword">New</span> CustomerDesktopAppContext(settings)</code></pre></div>
+</figure>
 <p>Things to notice:</p>
 <ul>
 <li>Backend choice happens at the app boundary.</li>

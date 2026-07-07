@@ -96,6 +96,8 @@ blockquote{ margin:1.4em 0; padding:.2em 1.1em; border-left:3px solid var(--acce
 .snip-loc{ display:inline-flex; align-items:center; gap:6px; font-family:var(--mono); font-size:12.5px;
   color:var(--accent); text-decoration:none; padding:2px 6px; border-radius:6px; }
 .snip-loc:hover{ background:var(--accent-soft); text-decoration:none; }
+.snip-label{ color:var(--ink-soft); cursor:default; font-weight:600; }
+.snip-label:hover{ background:transparent; }
 .snip-ic{ width:13px; height:13px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
 .snip-path{ font-weight:600; } .snip-lines{ opacity:.7; }
 .snip-cap{ font-family:var(--body); font-size:13px; color:var(--muted); }
@@ -105,6 +107,7 @@ pre.code code{ display:block; }
 pre.code.fence{ margin:1.25em 0; padding:14px 16px; overflow-x:auto; border:1px solid var(--line); border-radius:12px;
   box-shadow:0 1px 2px rgba(15,23,42,.04); }
 pre.code.fence code{ white-space:pre; }
+.snippet-fence pre.code.fence{ margin:0; border:0; border-radius:0; box-shadow:none; }
 .code .cl{ display:block; white-space:pre; padding:0 16px 0 0; }
 .code .cl::before{ content:counter(ln); counter-increment:ln; display:inline-block;
   width:3.2ch; margin-right:16px; padding-right:10px; text-align:right; color:var(--gutter);
@@ -390,7 +393,13 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
   </div><figcaption class="figcap"><b>Figure 1.1</b> - The basic runtime flow from user action to backend result.</figcaption></figure>
 <h2>The Mental Model</h2>
 <p>Use this rule when reading or extending the framework:</p>
-<pre class="code fence lang-text"><code>Window controls -&gt; ViewModel -&gt; ICustomerRepository -&gt; backend adapter -&gt; backend service</code></pre>
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Conceptual flow</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-text"><code>Window controls -&gt; ViewModel -&gt; ICustomerRepository -&gt; backend adapter -&gt; backend service</code></pre></div>
+</figure>
 <p>The arrow points in the direction of knowledge. A Window may know the ViewModel. A ViewModel may know <code>ICustomerRepository</code>. The repository implementation may know PocketBase, SQLite, or another database. The core ViewModel should not know which backend was selected.</p>
 <p>This keeps the desktop app from becoming a maze of button handlers that also parse JSON, build SQL, manage API tokens, and display validation messages.</p>
 <h2>MVVM In One Screen</h2>
@@ -454,7 +463,12 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
 <p>The older <code>Framework</code>, <code>Models</code>, and <code>ViewModels</code> folders remain useful context from the previous implementation. For new production work, prefer the Customer MVVM pattern described in this guide.</p>
 <h2>A Tiny Screen Example</h2>
 <p>A desktop window should treat controls as input and output only. The ViewModel owns the use case.</p>
-<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> SearchField_TextChanged()
+<figure class="snippet snippet-fence">
+  <figcaption class="snip-head">
+    <span class="snip-loc snip-label">Xojo example</span>
+    <button class="snip-cmt" data-comment-block title="Comment on this whole block, or highlight lines to comment on a narrower span"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4 8.8 8.8 0 0 1-4-.9L3 20l1-3.9a8.4 8.4 0 1 1 17-4.6z"/></svg>Comment</button>
+  </figcaption>
+  <div class="snip-body"><pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> SearchField_TextChanged()
   mListVM.SearchTerm = SearchField.Text
   mListVM.LoadPage(<span class="hljs-number">1</span>, <span class="hljs-number">50</span>)
   RenderCustomers(mListVM.Customers())
@@ -467,7 +481,8 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
     CustomerListBox.AddRow(c.FullName(), c.Email)
     CustomerListBox.RowTagAt(CustomerListBox.LastAddedRowIndex) = c.ID
   <span class="hljs-keyword">Next</span>
-<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre></div>
+</figure>
 <p>The example has no SQL and no HTTP. That is the point. A developer can inspect the screen behavior without also understanding the server.</p>
 <p>Things to notice:</p>
 <ul>
