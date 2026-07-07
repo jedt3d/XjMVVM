@@ -12,6 +12,7 @@ Protected Class Customer
 		Function Clone() As Customer
 		  Var copy As New Customer(FirstName, LastName, Email)
 		  copy.ID = ID
+		  copy.OwnerID = OwnerID
 		  copy.DateOfBirth = DateOfBirth
 		  copy.Gender = Gender
 		  Return copy
@@ -29,6 +30,7 @@ Protected Class Customer
 		Function ToDictionary() As Dictionary
 		  Var d As New Dictionary()
 		  d.Value("id") = ID
+		  d.Value("owner_id") = OwnerID
 		  d.Value("first_name") = FirstName
 		  d.Value("last_name") = LastName
 		  d.Value("email") = Email
@@ -61,6 +63,10 @@ Protected Class Customer
 
 	#tag Property, Flags = &h0
 		LastName As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		OwnerID As String
 	#tag EndProperty
 
 

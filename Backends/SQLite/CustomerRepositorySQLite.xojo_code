@@ -66,6 +66,7 @@ Implements ICustomerRepository
 
 		  mDB.ExecuteSQL("CREATE TABLE IF NOT EXISTS customers (" + _
 		  "id INTEGER PRIMARY KEY AUTOINCREMENT, " + _
+		  "owner_id TEXT, " + _
 		  "first_name TEXT NOT NULL, " + _
 		  "last_name TEXT NOT NULL, " + _
 		  "email TEXT, " + _
@@ -75,6 +76,10 @@ Implements ICustomerRepository
 		  "updated_at TEXT DEFAULT (datetime('now')))")
 		  mDB.ExecuteSQL("CREATE INDEX IF NOT EXISTS idx_customers_name ON customers (last_name, first_name)")
 		  mDB.ExecuteSQL("CREATE INDEX IF NOT EXISTS idx_customers_email ON customers (email)")
+		  If Not ColumnExists("customers", "owner_id") Then
+		    mDB.ExecuteSQL("ALTER TABLE customers ADD COLUMN owner_id TEXT")
+		  End If
+		  mDB.ExecuteSQL("CREATE INDEX IF NOT EXISTS idx_customers_owner_id ON customers (owner_id)")
 		End Sub
 	#tag EndMethod
 
@@ -85,7 +90,7 @@ Implements ICustomerRepository
 		  Var value As Integer = IDValue(id)
 		  If value <= 0 Then Return Nil
 
-		  Var rs As RowSet = mDB.SelectSQL("SELECT id, first_name, last_name, email, date_of_birth, gender FROM customers WHERE id = ?", value)
+		  Var rs As RowSet = mDB.SelectSQL("SELECT id, owner_id, first_name, last_name, email, date_of_birth, gender FROM customers WHERE id = ?", value)
 		  If rs.AfterLastRow Then
 		    rs.Close()
 		    Return Nil
@@ -106,7 +111,7 @@ Implements ICustomerRepository
 
 		  Var offset As Integer = (pageNumber - 1) * pageSize
 		  Var term As String = searchTerm.Trim().Lowercase()
-		  Var sql As String = "SELECT id, first_name, last_name, email, date_of_birth, gender FROM customers"
+		  Var sql As String = "SELECT id, owner_id, first_name, last_name, email, date_of_birth, gender FROM customers"
 		  Var rs As RowSet
 
 		  If term = "" Then
@@ -137,15 +142,30 @@ Implements ICustomerRepository
 		  Var value As Integer = IDValue(saved.ID)
 
 		  If value <= 0 Then
-		    mDB.ExecuteSQL("INSERT INTO customers (first_name, last_name, email, date_of_birth, gender) VALUES (?, ?, ?, ?, ?)", _
-		    saved.FirstName, saved.LastName, saved.Email, saved.DateOfBirth, saved.Gender)
+		    mDB.ExecuteSQL("INSERT INTO customers (owner_id, first_name, last_name, email, date_of_birth, gender) VALUES (?, ?, ?, ?, ?, ?)", _
+		    saved.OwnerID, saved.FirstName, saved.LastName, saved.Email, saved.DateOfBirth, saved.Gender)
 		    saved.ID = mDB.LastRowID.ToString()
 		    Return FindByID(saved.ID)
 		  End If
 
-		  mDB.ExecuteSQL("UPDATE customers SET first_name = ?, last_name = ?, email = ?, date_of_birth = ?, gender = ?, updated_at = datetime('now') WHERE id = ?", _
-		  saved.FirstName, saved.LastName, saved.Email, saved.DateOfBirth, saved.Gender, value)
+		  mDB.ExecuteSQL("UPDATE customers SET owner_id = ?, first_name = ?, last_name = ?, email = ?, date_of_birth = ?, gender = ?, updated_at = datetime('now') WHERE id = ?", _
+		  saved.OwnerID, saved.FirstName, saved.LastName, saved.Email, saved.DateOfBirth, saved.Gender, value)
 		  Return FindByID(saved.ID)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function ColumnExists(tableName As String, columnName As String) As Boolean
+		  Var rs As RowSet = mDB.SelectSQL("PRAGMA table_info(" + tableName + ")")
+		  While Not rs.AfterLastRow
+		    If rs.Column("name").StringValue = columnName Then
+		      rs.Close()
+		      Return True
+		    End If
+		    rs.MoveToNextRow()
+		  Wend
+		  rs.Close()
+		  Return False
 		End Function
 	#tag EndMethod
 
@@ -153,6 +173,7 @@ Implements ICustomerRepository
 		Private Function CustomerFromRow(rs As RowSet) As Customer
 		  Var c As New Customer()
 		  c.ID = rs.Column("id").StringValue
+		  c.OwnerID = rs.Column("owner_id").StringValue
 		  c.FirstName = rs.Column("first_name").StringValue
 		  c.LastName = rs.Column("last_name").StringValue
 		  c.Email = rs.Column("email").StringValue

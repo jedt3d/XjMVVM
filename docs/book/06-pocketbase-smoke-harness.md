@@ -45,3 +45,15 @@ This proves that stock PocketBase can host the `customers` collection contract
 used by the XjMVVM adapter. It does not yet prove that a compiled Xojo app made
 the live call, so the next runtime check should drive the same CRUD path through
 `PocketBaseURLConnectionTransport`.
+
+## Production Harness
+
+The production backend proof now lives in:
+
+```bash
+python3 tools/pocketbase_production_smoke.py --no-download
+```
+
+Unlike the disposable public harness, this script uses the checked-in
+`pocketbase/pb_migrations` directory and proves authenticated owner-only access
+rules with two users.

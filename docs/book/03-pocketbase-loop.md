@@ -48,3 +48,17 @@ The smoke harness now starts stock PocketBase, creates a disposable
 `customers` collection, and proves the record API shape with real
 create/list/view/update/delete calls. The next REST proof should run the same
 path from compiled Xojo code through `PocketBaseURLConnectionTransport`.
+
+## Production Contract
+
+Cycle 6 adds a checked-in `pocketbase/pb_migrations` contract and a production
+smoke harness. The production `customers` collection is no longer public: every
+record has a required `owner` relation to the authenticated `users` record, and
+list/view/create/update/delete all use:
+
+```text
+@request.auth.id != "" && owner = @request.auth.id
+```
+
+The backend is still stock PocketBase. The repository owns migrations and smoke
+proofs, not a custom backend fork.

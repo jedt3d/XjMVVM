@@ -37,10 +37,13 @@ Inherits TestGroup
 		Sub FindByIDReturnsSavedCustomerTest()
 		  Var repo As CustomerRepositorySQLite = NewRepository()
 		  Var saved As Customer = repo.Save(New Customer("Ada", "Lovelace", "ada@example.com"))
+		  saved.OwnerID = "user123"
+		  saved = repo.Save(saved)
 
 		  Var found As Customer = repo.FindByID(saved.ID)
 
 		  Assert.IsNotNil(found)
+		  Assert.AreEqual("user123", found.OwnerID)
 		  Assert.AreEqual("Ada", found.FirstName)
 		  Assert.AreEqual("Lovelace", found.LastName)
 		  repo.Close()

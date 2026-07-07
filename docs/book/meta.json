@@ -3,7 +3,7 @@
   "brand": "XjMVVM Docs",
   "title": "XjMVVM Production Reboot",
   "subtitle": "A source-backed implementation notebook for one-repo MVVM, PocketBase, SQLite, and desktop-first Xojo apps",
-  "version": "Repository composition proof · 2026-07-08",
+  "version": "Production PocketBase proof · 2026-07-08",
   "parts": [
     {
       "label": "Part 1",
@@ -65,6 +65,13 @@
           "title": "Repository Composition",
           "sub": "Factory helpers that choose fake, SQLite, or PocketBase adapters at the app boundary",
           "file": "08-repository-composition.md"
+        },
+        {
+          "num": "9",
+          "slug": "09-production-pocketbase",
+          "title": "Production PocketBase",
+          "sub": "Authenticated owner-only Customer schema, rules, smoke proof, and Xojo auth helpers",
+          "file": "09-production-pocketbase.md"
         }
       ]
     }

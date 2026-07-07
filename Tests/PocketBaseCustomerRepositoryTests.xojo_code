@@ -25,13 +25,14 @@ Inherits TestGroup
 	#tag Method, Flags = &h0
 		Sub FindPageMapsPocketBaseRecordsTest()
 		  Var transport As New FakePocketBaseTransport()
-		  transport.NextResponse = New PocketBaseResponse(200, "{""page"":1,""perPage"":10,""totalItems"":1,""items"":[{""id"":""abc123"",""first_name"":""Ada"",""last_name"":""Lovelace"",""email"":""ada@example.com""}]}")
+		  transport.NextResponse = New PocketBaseResponse(200, "{""page"":1,""perPage"":10,""totalItems"":1,""items"":[{""id"":""abc123"",""owner"":""user123"",""first_name"":""Ada"",""last_name"":""Lovelace"",""email"":""ada@example.com""}]}")
 		  Var repo As CustomerRepositoryPocketBase = NewRepository(transport)
 
 		  Var customers() As Customer = repo.FindPage("ada", 1, 10)
 
 		  Assert.AreEqual(1, CType(customers.Count, Integer), "Repository should map one PocketBase record")
 		  Assert.AreEqual("abc123", customers(0).ID)
+		  Assert.AreEqual("user123", customers(0).OwnerID)
 		  Assert.AreEqual("Ada", customers(0).FirstName)
 		  Assert.AreEqual("GET", transport.LastMethod)
 		  Assert.IsTrue(transport.LastPath.IndexOf("/api/collections/customers/records") = 0)
@@ -47,6 +48,7 @@ Inherits TestGroup
 		  transport.NextResponse = New PocketBaseResponse(200, "{""id"":""new123"",""first_name"":""Grace"",""last_name"":""Hopper"",""email"":""grace@example.com""}")
 		  Var repo As CustomerRepositoryPocketBase = NewRepository(transport)
 		  Var customer As New Customer("Grace", "Hopper", "grace@example.com")
+		  customer.OwnerID = "user123"
 
 		  Var saved As Customer = repo.Save(customer)
 
@@ -55,6 +57,7 @@ Inherits TestGroup
 		  Assert.AreEqual("POST", transport.LastMethod)
 		  Assert.AreEqual("/api/collections/customers/records", transport.LastPath)
 		  Assert.IsTrue(transport.LastBody.IndexOf("""first_name"":""Grace""") >= 0)
+		  Assert.IsTrue(transport.LastBody.IndexOf("""owner"":""user123""") >= 0)
 		End Sub
 	#tag EndMethod
 

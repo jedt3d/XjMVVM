@@ -31,6 +31,11 @@ For a desktop line-of-business app, the first production choices are likely:
 - SQLite file repository for local/offline storage
 - PocketBase repository for server-backed multi-user storage
 
+When using PocketBase production mode, startup/auth code should call
+`PocketBaseAuthService.AuthWithPassword`, store the returned token using the
+platform's secure storage, and set new `Customer.OwnerID` values to the
+authenticated record ID before saving.
+
 Future platform projects can add their own composition modules if Xojo desktop,
 iOS, and Android need different file locations, token storage, or sync policy.
 

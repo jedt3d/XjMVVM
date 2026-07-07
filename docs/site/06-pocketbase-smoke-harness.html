@@ -331,6 +331,13 @@ provided.</p>
 used by the XjMVVM adapter. It does not yet prove that a compiled Xojo app made
 the live call, so the next runtime check should drive the same CRUD path through
 <code>PocketBaseURLConnectionTransport</code>.</p>
+<h2>Production Harness</h2>
+<p>The production backend proof now lives in:</p>
+<pre><code class="language-bash">python3 tools/pocketbase_production_smoke.py --no-download
+</code></pre>
+<p>Unlike the disposable public harness, this script uses the checked-in
+<code>pocketbase/pb_migrations</code> directory and proves authenticated owner-only access
+rules with two users.</p>
 
 <nav class="chnav"><a class="prev" href="05-urlconnection-transport.html"><span class="dir">← Previous</span><span class="t">URLConnection Transport</span></a><a class="next" href="07-sqlite-customer-repository.html"><span class="dir">Next →</span><span class="t">SQLite Customer Repository</span></a></nav>
 </article></main>

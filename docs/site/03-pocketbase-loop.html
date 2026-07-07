@@ -338,6 +338,15 @@ without requiring every unit test to start a PocketBase process.</p>
 <code>customers</code> collection, and proves the record API shape with real
 create/list/view/update/delete calls. The next REST proof should run the same
 path from compiled Xojo code through <code>PocketBaseURLConnectionTransport</code>.</p>
+<h2>Production Contract</h2>
+<p>Cycle 6 adds a checked-in <code>pocketbase/pb_migrations</code> contract and a production
+smoke harness. The production <code>customers</code> collection is no longer public: every
+record has a required <code>owner</code> relation to the authenticated <code>users</code> record, and
+list/view/create/update/delete all use:</p>
+<pre><code class="language-text">@request.auth.id != &quot;&quot; &amp;&amp; owner = @request.auth.id
+</code></pre>
+<p>The backend is still stock PocketBase. The repository owns migrations and smoke
+proofs, not a custom backend fork.</p>
 
 <nav class="chnav"><a class="prev" href="02-mvvm-core-map.html"><span class="dir">← Previous</span><span class="t">MVVM Core Map</span></a><a class="next" href="04-pocketbase-adapter-proof.html"><span class="dir">Next →</span><span class="t">PocketBase Adapter Proof</span></a></nav>
 </article></main>

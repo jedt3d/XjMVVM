@@ -127,10 +127,12 @@ def write_migration(migrations_dir: Path) -> None:
     )
 
 
-def request_json(method: str, url: str, data: dict | None = None, timeout: int = 10) -> tuple[int, dict]:
+def request_json(method: str, url: str, data: dict | None = None, timeout: int = 10, token: str = "") -> tuple[int, dict]:
     body = None if data is None else json.dumps(data).encode("utf-8")
     req = urllib.request.Request(url, data=body, method=method)
     req.add_header("Accept", "application/json")
+    if token:
+        req.add_header("Authorization", token)
     if data is not None:
         req.add_header("Content-Type", "application/json")
 

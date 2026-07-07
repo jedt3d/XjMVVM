@@ -212,6 +212,10 @@ core
 *.keystore
 secrets/
 credentials/
+pocketbase/pb_data/
+pocketbase/pb_data*/
+pocketbase/pocketbase
+pocketbase/pocketbase.exe
 
 # API keys (if checked in accidentally)
 api_keys.txt
