@@ -28,5 +28,13 @@ Protected Module CustomerRepositoryFactory
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Function NewSQL(db As Database, dialect As CustomerSQLDialect = Nil, ownsConnection As Boolean = False) As CustomerRepositorySQL
+		  Var repo As New CustomerRepositorySQL(db, dialect, ownsConnection)
+		  repo.EnsureSchema()
+		  Return repo
+		End Function
+	#tag EndMethod
+
 End Module
 #tag EndModule

@@ -1,50 +1,36 @@
 #tag Class
-Protected Class CustomerRepositoryFactoryTests
+Protected Class CustomerDesktopAppContextTests
 Inherits TestGroup
 	#tag Method, Flags = &h0
-		Sub NewFakeReturnsWorkingRepositoryTest()
-		  Var repo As FakeCustomerRepository = CustomerRepositoryFactory.NewFake()
-
-		  Var saved As Customer = repo.Save(New Customer("Ada", "Lovelace", "ada@example.com"))
-
-		  Assert.IsNotNil(saved)
-		  Assert.IsTrue(repo.Count("") = 1, "Fake factory repository should save customers")
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Sub NewPocketBaseReturnsRepositoryTest()
-		  Var repo As CustomerRepositoryPocketBase = CustomerRepositoryFactory.NewPocketBase("http://127.0.0.1:8090", "token")
-
-		  Assert.IsNotNil(repo)
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Sub NewSQLiteReturnsWorkingRepositoryTest()
+		Sub DirectSQLContextSharesRepositoryAcrossViewModelsTest()
 		  Var db As New SQLiteDatabase()
 		  db.Connect()
-		  Var repo As CustomerRepositorySQLite = CustomerRepositoryFactory.NewSQLite(db)
+		  Var context As New CustomerDesktopAppContext(CustomerBackendSettings.SQL(db, CustomerSQLDialect.SQLite(), True))
 
-		  Var saved As Customer = repo.Save(New Customer("Grace", "Hopper", "grace@example.com"))
+		  Var detail As CustomerDetailViewModel = context.DetailViewModel()
+		  Var saved As Boolean = detail.Save(New Customer("Grace", "Hopper", "grace@example.com"))
+		  Var list As CustomerListViewModel = context.ListViewModel()
+		  list.LoadPage(1, 10)
 
-		  Assert.IsNotNil(saved)
-		  Assert.IsTrue(repo.Count("") = 1, "SQLite factory repository should save customers")
-		  db.Close()
+		  Assert.IsTrue(saved, "Detail view model should save through the direct SQL context")
+		  Assert.AreEqual(1, CType(list.Customers().Count, Integer), "List view model should see the same repository")
+		  Assert.IsTrue(context.StatusMessage.IndexOf("direct SQL") >= 0, "Context should report the selected backend")
+		  context.Close()
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub NewSQLReturnsWorkingRepositoryTest()
-		  Var db As New SQLiteDatabase()
-		  db.Connect()
-		  Var repo As CustomerRepositorySQL = CustomerRepositoryFactory.NewSQL(db, CustomerSQLDialect.SQLite())
+		Sub FakeContextSharesRepositoryAcrossViewModelsTest()
+		  Var context As New CustomerDesktopAppContext(CustomerBackendSettings.Fake())
 
-		  Var saved As Customer = repo.Save(New Customer("Katherine", "Johnson", "katherine@example.com"))
+		  Var detail As CustomerDetailViewModel = context.DetailViewModel()
+		  Var saved As Boolean = detail.Save(New Customer("Ada", "Lovelace", "ada@example.com"))
+		  Var list As CustomerListViewModel = context.ListViewModel()
+		  list.LoadPage(1, 10)
 
-		  Assert.IsNotNil(saved)
-		  Assert.IsTrue(repo.Count("") = 1, "Direct SQL factory repository should save customers")
-		  db.Close()
+		  Assert.IsTrue(saved, "Detail view model should save through the fake context")
+		  Assert.AreEqual(1, CType(list.Customers().Count, Integer), "List view model should see the same repository")
+		  Assert.IsTrue(context.StatusMessage.IndexOf("fake") >= 0, "Context should report the selected backend")
 		End Sub
 	#tag EndMethod
 
