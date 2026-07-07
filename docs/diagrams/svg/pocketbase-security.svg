@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 1240" role="img" aria-labelledby="title desc">
+  <title id="title">PocketBase security flow</title>
+  <desc id="desc">A vertical security diagram showing login, token storage, owner field, PocketBase rules, and owner-only Customer records.</desc>
+  <defs>
+    <style>
+      .bg{fill:#fbfaf7}.box{stroke:#1f2937;stroke-width:2.4;rx:14}.client{fill:#dbeafe}.auth{fill:#dcfce7}.rule{fill:#fef3c7}.deny{fill:#fee2e2}.data{fill:#e0f2fe}.t{font-family:Inter,Arial,sans-serif;font-size:23px;font-weight:800;fill:#111827}.s{font-family:Inter,Arial,sans-serif;font-size:16px;fill:#374151}.edge{stroke:#374151;stroke-width:2.5;fill:none;marker-end:url(#arrow)}.label{font-family:Inter,Arial,sans-serif;font-size:15px;fill:#4b5563}
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#374151"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="760" height="1240"/>
+  <text class="t" x="380" y="58" text-anchor="middle">PocketBase Security</text>
+  <text class="s" x="380" y="88" text-anchor="middle">Authenticated users can access only their own Customer records.</text>
+
+  <rect class="box client" x="110" y="126" width="540" height="96"/>
+  <text class="t" x="380" y="166" text-anchor="middle">Desktop Login Window</text>
+  <text class="s" x="380" y="195" text-anchor="middle">Collect identity and password</text>
+
+  <path class="edge" d="M380 222 V276"/>
+
+  <rect class="box auth" x="110" y="276" width="540" height="110"/>
+  <text class="t" x="380" y="317" text-anchor="middle">PocketBase Auth Service</text>
+  <text class="s" x="380" y="348" text-anchor="middle">POST /api/collections/users/auth-with-password</text>
+  <text class="s" x="380" y="374" text-anchor="middle">Stores token on PocketBaseClient</text>
+
+  <path class="edge" d="M380 386 V440"/>
+
+  <rect class="box client" x="110" y="440" width="540" height="96"/>
+  <text class="t" x="380" y="480" text-anchor="middle">Customer Save</text>
+  <text class="s" x="380" y="509" text-anchor="middle">Model includes OwnerID for local and server meaning</text>
+
+  <path class="edge" d="M380 536 V590"/>
+
+  <rect class="box rule" x="110" y="590" width="540" height="128"/>
+  <text class="t" x="380" y="631" text-anchor="middle">PocketBase Collection Rule</text>
+  <text class="s" x="380" y="664" text-anchor="middle">@request.auth.id != ""</text>
+  <text class="s" x="380" y="694" text-anchor="middle">and owner = @request.auth.id</text>
+
+  <path class="edge" d="M380 718 V772"/>
+
+  <rect class="box data" x="110" y="772" width="540" height="96"/>
+  <text class="t" x="380" y="812" text-anchor="middle">Allowed</text>
+  <text class="s" x="380" y="841" text-anchor="middle">Owner can list, view, create, update, delete</text>
+
+  <path class="edge" d="M380 868 V922"/>
+
+  <rect class="box deny" x="110" y="922" width="540" height="96"/>
+  <text class="t" x="380" y="962" text-anchor="middle">Denied Or Filtered</text>
+  <text class="s" x="380" y="991" text-anchor="middle">Guest and other users cannot see owner records</text>
+
+  <path class="edge" d="M380 1018 V1072"/>
+
+  <rect class="box auth" x="110" y="1072" width="540" height="96"/>
+  <text class="t" x="380" y="1112" text-anchor="middle">Production Smoke</text>
+  <text class="s" x="380" y="1141" text-anchor="middle">Automated proof with two users and one record</text>
+</svg>

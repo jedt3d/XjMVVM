@@ -3,7 +3,7 @@
 //   [[diagram:<name>|<caption>]]            inline diagrams/svg/<name>.svg in a pan/zoom viewer
 //   [[snippet:<relpath>:<start-end>|<cap>]]  code snippet pulled from the Pi v0.80.3 source
 // Raw HTML (e.g. <div class="note">…</div>) passes through marked untouched.
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, rmSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { marked } from "marked";
@@ -36,7 +36,7 @@ function inlineSvg(name) {
 }
 
 function diagramBlock(name, caption, figNo) {
-  const cap = caption ? `<figcaption class="figcap"><b>รูปที่ ${figNo}</b> — ${caption}</figcaption>` : "";
+  const cap = caption ? `<figcaption class="figcap"><b>Figure ${figNo}</b> - ${caption}</figcaption>` : "";
   return `<figure class="diagram">
   <div class="figure-frame">
     <div class="toolbar">
@@ -99,6 +99,9 @@ ${inner}
 
 // ---- build chapter pages ----
 mkdirSync(`${ROOT}/site`, { recursive: true });
+for (const file of readdirSync(`${ROOT}/site`)) {
+  if (file.endsWith(".html")) rmSync(`${ROOT}/site/${file}`);
+}
 realChapters.forEach((c, i) => {
   const md = readFileSync(`${ROOT}/book/${c.file}`, "utf8");
   const inner = `<main class="wrap"><article class="prose">
@@ -121,7 +124,7 @@ for (const part of meta.parts) {
   toc += `<section class="toc-part"><div class="part-label">${part.label}</div><h2>${part.title}</h2><p class="part-desc">${part.desc || ""}</p><ol class="toc">${items}</ol></section>\n`;
 }
 const index = `<main class="wrap">
-<div class="book-hero"><h1>${meta.title}</h1><p class="tagline">${meta.subtitle}</p><p class="meta">${meta.version} · Source-backed implementation notes</p></div>
+<div class="book-hero"><h1>${meta.title}</h1><p class="tagline">${meta.subtitle}</p><p class="meta">${meta.version} · Developer Guide</p></div>
 ${toc}</main>`;
 writeFileSync(`${ROOT}/site/index.html`, page(`${meta.title}`, "contents", index));
 
