@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 1180" role="img" aria-labelledby="title desc">
+  <title id="title">XjMVVM request lifecycle</title>
+  <desc id="desc">A vertical flow showing how a desktop user action moves through a View, ViewModel, repository, backend adapter, backend service, and back to status in the View.</desc>
+  <defs>
+    <style>
+      .bg{fill:#fbfaf7}.box{stroke:#1f2937;stroke-width:2.4;rx:14}.view{fill:#dbeafe}.vm{fill:#dcfce7}.core{fill:#fef3c7}.repo{fill:#ede9fe}.back{fill:#fee2e2}.data{fill:#e0f2fe}.t{font-family:Inter,Arial,sans-serif;font-size:24px;font-weight:700;fill:#111827}.s{font-family:Inter,Arial,sans-serif;font-size:17px;fill:#374151}.edge{stroke:#374151;stroke-width:2.6;fill:none;marker-end:url(#arrow)}.label{font-family:Inter,Arial,sans-serif;font-size:15px;fill:#4b5563}
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#374151"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="760" height="1180"/>
+  <text class="t" x="380" y="58" text-anchor="middle">One User Action</text>
+  <text class="s" x="380" y="88" text-anchor="middle">The View stays visual. The ViewModel owns the use case.</text>
+
+  <rect class="box view" x="110" y="125" width="540" height="92"/>
+  <text class="t" x="380" y="164" text-anchor="middle">DesktopWindow Event</text>
+  <text class="s" x="380" y="195" text-anchor="middle">Button press, search change, row selection</text>
+
+  <path class="edge" d="M380 217 V278"/>
+  <text class="label" x="398" y="254">copy control values</text>
+
+  <rect class="box vm" x="110" y="278" width="540" height="104"/>
+  <text class="t" x="380" y="319" text-anchor="middle">ViewModel Command</text>
+  <text class="s" x="380" y="350" text-anchor="middle">LoadPage, Load, Save, Delete</text>
+
+  <path class="edge" d="M380 382 V443"/>
+  <text class="label" x="398" y="419">validate input</text>
+
+  <rect class="box core" x="110" y="443" width="540" height="104"/>
+  <text class="t" x="380" y="484" text-anchor="middle">Model + Validator</text>
+  <text class="s" x="380" y="515" text-anchor="middle">Customer and CustomerValidator</text>
+
+  <path class="edge" d="M380 547 V608"/>
+  <text class="label" x="398" y="584">call contract</text>
+
+  <rect class="box repo" x="110" y="608" width="540" height="104"/>
+  <text class="t" x="380" y="649" text-anchor="middle">ICustomerRepository</text>
+  <text class="s" x="380" y="680" text-anchor="middle">FindPage, Count, FindByID, Save, Delete</text>
+
+  <path class="edge" d="M380 712 V773"/>
+  <text class="label" x="398" y="749">delegate to selected adapter</text>
+
+  <rect class="box back" x="110" y="773" width="540" height="104"/>
+  <text class="t" x="380" y="814" text-anchor="middle">Backend Adapter</text>
+  <text class="s" x="380" y="845" text-anchor="middle">Fake, SQLite, SQL, or PocketBase REST</text>
+
+  <path class="edge" d="M380 877 V938"/>
+  <text class="label" x="398" y="914">query or request</text>
+
+  <rect class="box data" x="110" y="938" width="540" height="104"/>
+  <text class="t" x="380" y="979" text-anchor="middle">Backend Service</text>
+  <text class="s" x="380" y="1010" text-anchor="middle">Local database, server database, or PocketBase</text>
+
+  <path class="edge" d="M270 1042 C230 1088 230 1118 300 1128 H460 C530 1118 530 1088 490 1042"/>
+  <text class="label" x="380" y="1133" text-anchor="middle">Customer data or status flows back to the View</text>
+</svg>

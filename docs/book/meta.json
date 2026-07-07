@@ -1,98 +1,112 @@
 {
   "lang": "en",
-  "brand": "XjMVVM Docs",
-  "title": "XjMVVM Production Reboot",
-  "subtitle": "A source-backed implementation notebook for one-repo MVVM, PocketBase, SQLite, and desktop-first Xojo apps",
-  "version": "CI and docs publishing proof · 2026-07-08",
+  "brand": "XjMVVM Guide",
+  "title": "XjMVVM Developer Guide",
+  "subtitle": "A practical guide to learning MVVM in Xojo and building desktop line-of-business apps with PocketBase REST, SQLite, and direct database backends",
+  "version": "Production guide · 2026-07-08",
   "parts": [
     {
       "label": "Part 1",
-      "title": "Implementation Cycle",
-      "desc": "The first visible slice: documentation system, architecture boundary, and backend loop.",
+      "title": "Learn The Concept",
+      "desc": "MVVM in plain Xojo language, a quick conceptual tutorial, and the framework architecture.",
       "chapters": [
         {
           "num": "1",
-          "slug": "01-implementation-cycle",
-          "title": "First Implementation Cycle",
-          "sub": "How the reboot starts without disturbing the existing Xojo source",
-          "file": "01-implementation-cycle.md"
+          "slug": "01-start-here",
+          "title": "Start Here",
+          "sub": "What XjMVVM is, what MVVM solves, and how to read the project",
+          "file": "01-start-here.md"
         },
         {
           "num": "2",
-          "slug": "02-mvvm-core-map",
-          "title": "MVVM Core Map",
-          "sub": "Shared ViewModels and repository interfaces across desktop and mobile",
-          "file": "02-mvvm-core-map.md"
+          "slug": "02-quick-tutorial",
+          "title": "Quick Tutorial",
+          "sub": "A ten-minute conceptual walkthrough from model to desktop screen",
+          "file": "02-quick-tutorial.md"
         },
         {
           "num": "3",
-          "slug": "03-pocketbase-loop",
-          "title": "PocketBase Loop",
-          "sub": "Stock PocketBase as the default REST backend adapter target",
-          "file": "03-pocketbase-loop.md"
+          "slug": "03-rowset-to-mvvm",
+          "title": "From RowSet To MVVM",
+          "sub": "How direct SQL Xojo code becomes design-pattern-based framework code",
+          "file": "03-rowset-to-mvvm.md"
         },
         {
           "num": "4",
-          "slug": "04-pocketbase-adapter-proof",
-          "title": "PocketBase Adapter Proof",
-          "sub": "A compile-checked REST repository path behind the shared Customer ViewModels",
-          "file": "04-pocketbase-adapter-proof.md"
+          "slug": "03-architecture",
+          "title": "Architecture",
+          "sub": "The vertical dependency rule and the production system shape",
+          "file": "02-architecture.md"
         },
         {
           "num": "5",
-          "slug": "05-urlconnection-transport",
-          "title": "URLConnection Transport",
-          "sub": "Concrete Xojo HTTP transport for the PocketBase repository adapter",
-          "file": "05-urlconnection-transport.md"
-        },
+          "slug": "04-mvvm-core",
+          "title": "MVVM Core",
+          "sub": "Models, validation, repositories, and ViewModels",
+          "file": "03-mvvm-core.md"
+        }
+      ]
+    },
+    {
+      "label": "Part 2",
+      "title": "Choose A Backend",
+      "desc": "How the same ViewModels run against fake, local database, direct SQL, or PocketBase REST adapters.",
+      "chapters": [
         {
           "num": "6",
-          "slug": "06-pocketbase-smoke-harness",
-          "title": "PocketBase Smoke Harness",
-          "sub": "Disposable stock PocketBase proof for the Customer records contract",
-          "file": "06-pocketbase-smoke-harness.md"
+          "slug": "05-backend-options",
+          "title": "Backend Options",
+          "sub": "The repository adapters and when to choose each one",
+          "file": "04-backend-options.md"
         },
         {
           "num": "7",
-          "slug": "07-sqlite-customer-repository",
-          "title": "SQLite Customer Repository",
-          "sub": "Local Customer persistence behind the same MVVM repository contract",
-          "file": "07-sqlite-customer-repository.md"
+          "slug": "06-desktop-composition",
+          "title": "Desktop Composition",
+          "sub": "The startup boundary for a Xojo desktop app",
+          "file": "05-desktop-composition.md"
         },
         {
           "num": "8",
-          "slug": "08-repository-composition",
-          "title": "Repository Composition",
-          "sub": "Factory helpers that choose fake, SQLite, or PocketBase adapters at the app boundary",
-          "file": "08-repository-composition.md"
+          "slug": "07-pocketbase-production",
+          "title": "PocketBase Production",
+          "sub": "Auth, owner rules, migrations, and REST integration",
+          "file": "06-pocketbase-production.md"
         },
         {
           "num": "9",
-          "slug": "09-production-pocketbase",
-          "title": "Production PocketBase",
-          "sub": "Authenticated owner-only Customer schema, rules, smoke proof, and Xojo auth helpers",
-          "file": "09-production-pocketbase.md"
-        },
+          "slug": "08-direct-database",
+          "title": "Direct Database",
+          "sub": "SQLite and Xojo Database driver integration",
+          "file": "07-direct-database.md"
+        }
+      ]
+    },
+    {
+      "label": "Part 3",
+      "title": "Ship And Extend",
+      "desc": "Testing, CI, docs publishing, and the pattern for building a real app on top of the framework.",
+      "chapters": [
         {
           "num": "10",
-          "slug": "10-desktop-app-integration",
-          "title": "Desktop App Integration",
-          "sub": "A startup composition context for desktop apps choosing Customer backends",
-          "file": "10-desktop-app-integration.md"
+          "slug": "09-testing-ci-publishing",
+          "title": "Testing And Publishing",
+          "sub": "Xojo text checks, PocketBase smokes, GitHub Actions, and GitHub Pages",
+          "file": "08-testing-ci-publishing.md"
         },
         {
           "num": "11",
-          "slug": "11-direct-database-expansion",
-          "title": "Direct Database Expansion",
-          "sub": "Generic direct-SQL Customer repository support for Xojo Database drivers",
-          "file": "11-direct-database-expansion.md"
+          "slug": "10-worked-example",
+          "title": "Worked Example",
+          "sub": "A conceptual Customer Desk app built the MVVM way",
+          "file": "10-worked-example.md"
         },
         {
           "num": "12",
-          "slug": "12-ci-docs-publishing",
-          "title": "CI And Docs Publishing",
-          "sub": "GitHub Actions validation and GitHub Pages deployment for the framework docs",
-          "file": "12-ci-docs-publishing.md"
+          "slug": "11-reference-map",
+          "title": "Reference Map",
+          "sub": "Important files, extension points, and production-readiness checklist",
+          "file": "10-reference-map.md"
         }
       ]
     }

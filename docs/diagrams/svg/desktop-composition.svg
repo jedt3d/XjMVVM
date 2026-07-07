@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 1240" role="img" aria-labelledby="title desc">
+  <title id="title">Desktop composition lifecycle</title>
+  <desc id="desc">A vertical lifecycle diagram showing startup settings, app context creation, ViewModel creation, Window binding, optional backend switch, and shutdown close.</desc>
+  <defs>
+    <style>
+      .bg{fill:#fbfaf7}.box{stroke:#1f2937;stroke-width:2.4;rx:14}.life{fill:#dbeafe}.compose{fill:#dcfce7}.view{fill:#ede9fe}.warn{fill:#fef3c7}.t{font-family:Inter,Arial,sans-serif;font-size:23px;font-weight:800;fill:#111827}.s{font-family:Inter,Arial,sans-serif;font-size:16px;fill:#374151}.edge{stroke:#374151;stroke-width:2.5;fill:none;marker-end:url(#arrow)}.label{font-family:Inter,Arial,sans-serif;font-size:15px;fill:#4b5563}
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#374151"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="760" height="1240"/>
+  <text class="t" x="380" y="58" text-anchor="middle">Desktop Composition Lifecycle</text>
+  <text class="s" x="380" y="88" text-anchor="middle">Create the backend once, then hand ViewModels to windows.</text>
+
+  <rect class="box life" x="110" y="126" width="540" height="96"/>
+  <text class="t" x="380" y="166" text-anchor="middle">App Opening</text>
+  <text class="s" x="380" y="195" text-anchor="middle">Read preferences, environment, or login state</text>
+
+  <path class="edge" d="M380 222 V276"/>
+
+  <rect class="box warn" x="110" y="276" width="540" height="110"/>
+  <text class="t" x="380" y="317" text-anchor="middle">Build Settings</text>
+  <text class="s" x="380" y="348" text-anchor="middle">CustomerBackendSettings.SQLiteFile()</text>
+  <text class="s" x="380" y="374" text-anchor="middle">or CustomerBackendSettings.PocketBase()</text>
+
+  <path class="edge" d="M380 386 V440"/>
+
+  <rect class="box compose" x="110" y="440" width="540" height="96"/>
+  <text class="t" x="380" y="480" text-anchor="middle">Create App Context</text>
+  <text class="s" x="380" y="509" text-anchor="middle">New CustomerDesktopAppContext(settings)</text>
+
+  <path class="edge" d="M380 536 V590"/>
+
+  <rect class="box compose" x="110" y="590" width="540" height="96"/>
+  <text class="t" x="380" y="630" text-anchor="middle">Context Builds Repository</text>
+  <text class="s" x="380" y="659" text-anchor="middle">Factory returns one ICustomerRepository</text>
+
+  <path class="edge" d="M380 686 V740"/>
+
+  <rect class="box view" x="110" y="740" width="540" height="96"/>
+  <text class="t" x="380" y="780" text-anchor="middle">Windows Ask For ViewModels</text>
+  <text class="s" x="380" y="809" text-anchor="middle">ListViewModel() and DetailViewModel()</text>
+
+  <path class="edge" d="M380 836 V890"/>
+
+  <rect class="box view" x="110" y="890" width="540" height="96"/>
+  <text class="t" x="380" y="930" text-anchor="middle">Bind Controls</text>
+  <text class="s" x="380" y="959" text-anchor="middle">Event handlers call ViewModel commands</text>
+
+  <path class="edge" d="M380 986 V1040"/>
+
+  <rect class="box warn" x="110" y="1040" width="540" height="96"/>
+  <text class="t" x="380" y="1080" text-anchor="middle">Backend Switch Or App Quit</text>
+  <text class="s" x="380" y="1109" text-anchor="middle">Call CustomerDesktopAppContext.Close()</text>
+
+  <text class="label" x="380" y="1194" text-anchor="middle">Only the composition layer knows which backend was chosen.</text>
+</svg>

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 1260" role="img" aria-labelledby="title desc">
+  <title id="title">XjMVVM architecture overview</title>
+  <desc id="desc">A vertical layered architecture diagram showing UI, ViewModel, domain, repository contract, backend adapters, and data stores.</desc>
+  <defs>
+    <style>
+      .bg{fill:#fbfaf7}.band{stroke:#1f2937;stroke-width:2.4;rx:16}.ui{fill:#dbeafe}.vm{fill:#dcfce7}.domain{fill:#fef3c7}.contract{fill:#ede9fe}.adapter{fill:#fee2e2}.store{fill:#e0f2fe}.t{font-family:Inter,Arial,sans-serif;font-size:24px;font-weight:800;fill:#111827}.s{font-family:Inter,Arial,sans-serif;font-size:17px;fill:#374151}.m{font-family:Inter,Arial,sans-serif;font-size:15px;fill:#4b5563}.edge{stroke:#374151;stroke-width:2.6;fill:none;marker-end:url(#arrow)}
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#374151"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="760" height="1260"/>
+  <text class="t" x="380" y="58" text-anchor="middle">Architecture Rule</text>
+  <text class="s" x="380" y="88" text-anchor="middle">Dependencies point downward. UI details stay out of Core.</text>
+
+  <rect class="band ui" x="80" y="128" width="600" height="116"/>
+  <text class="t" x="380" y="172" text-anchor="middle">View</text>
+  <text class="s" x="380" y="204" text-anchor="middle">DesktopWindow, controls, menus, dialogs</text>
+  <text class="m" x="380" y="226" text-anchor="middle">Reads and writes control values</text>
+
+  <path class="edge" d="M380 244 V292"/>
+
+  <rect class="band vm" x="80" y="292" width="600" height="116"/>
+  <text class="t" x="380" y="336" text-anchor="middle">ViewModel</text>
+  <text class="s" x="380" y="368" text-anchor="middle">CustomerListViewModel, CustomerDetailViewModel</text>
+  <text class="m" x="380" y="390" text-anchor="middle">Owns screen use cases and status</text>
+
+  <path class="edge" d="M380 408 V456"/>
+
+  <rect class="band domain" x="80" y="456" width="600" height="116"/>
+  <text class="t" x="380" y="500" text-anchor="middle">Domain</text>
+  <text class="s" x="380" y="532" text-anchor="middle">Customer, ValidationResult, CustomerValidator</text>
+  <text class="m" x="380" y="554" text-anchor="middle">Business data and rules</text>
+
+  <path class="edge" d="M380 572 V620"/>
+
+  <rect class="band contract" x="80" y="620" width="600" height="116"/>
+  <text class="t" x="380" y="664" text-anchor="middle">Repository Contract</text>
+  <text class="s" x="380" y="696" text-anchor="middle">ICustomerRepository</text>
+  <text class="m" x="380" y="718" text-anchor="middle">Backend-independent persistence vocabulary</text>
+
+  <path class="edge" d="M380 736 V784"/>
+
+  <rect class="band adapter" x="80" y="784" width="600" height="180"/>
+  <text class="t" x="380" y="828" text-anchor="middle">Backend Adapters</text>
+  <text class="s" x="380" y="860" text-anchor="middle">FakeCustomerRepository</text>
+  <text class="s" x="380" y="892" text-anchor="middle">CustomerRepositorySQLite</text>
+  <text class="s" x="380" y="924" text-anchor="middle">CustomerRepositorySQL</text>
+  <text class="s" x="380" y="956" text-anchor="middle">CustomerRepositoryPocketBase</text>
+
+  <path class="edge" d="M380 964 V1012"/>
+
+  <rect class="band store" x="80" y="1012" width="600" height="146"/>
+  <text class="t" x="380" y="1056" text-anchor="middle">Data Stores And Services</text>
+  <text class="s" x="380" y="1088" text-anchor="middle">In-memory fixtures</text>
+  <text class="s" x="380" y="1120" text-anchor="middle">SQLite file or direct database server</text>
+  <text class="s" x="380" y="1152" text-anchor="middle">Stock PocketBase REST backend</text>
+
+  <text class="m" x="380" y="1214" text-anchor="middle">Composition is beside these layers: it chooses the adapter at startup.</text>
+</svg>

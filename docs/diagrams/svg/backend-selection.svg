@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 1160" role="img" aria-labelledby="title desc">
+  <title id="title">Backend selection</title>
+  <desc id="desc">A vertical decision diagram showing how CustomerBackendSettings mode maps to the repository factory and concrete backends.</desc>
+  <defs>
+    <style>
+      .bg{fill:#fbfaf7}.box{stroke:#1f2937;stroke-width:2.4;rx:14}.start{fill:#dbeafe}.decision{fill:#fef3c7}.adapter{fill:#fee2e2}.contract{fill:#ede9fe}.t{font-family:Inter,Arial,sans-serif;font-size:23px;font-weight:800;fill:#111827}.s{font-family:Inter,Arial,sans-serif;font-size:16px;fill:#374151}.edge{stroke:#374151;stroke-width:2.5;fill:none;marker-end:url(#arrow)}.label{font-family:Inter,Arial,sans-serif;font-size:15px;fill:#4b5563}
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#374151"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="760" height="1160"/>
+  <text class="t" x="380" y="58" text-anchor="middle">Backend Selection</text>
+  <text class="s" x="380" y="88" text-anchor="middle">Settings keep backend choice out of the Window.</text>
+
+  <rect class="box start" x="110" y="125" width="540" height="100"/>
+  <text class="t" x="380" y="166" text-anchor="middle">CustomerBackendSettings</text>
+  <text class="s" x="380" y="197" text-anchor="middle">Mode plus connection inputs</text>
+
+  <path class="edge" d="M380 225 V286"/>
+
+  <rect class="box decision" x="150" y="286" width="460" height="110"/>
+  <text class="t" x="380" y="328" text-anchor="middle">Select Case Mode</text>
+  <text class="s" x="380" y="360" text-anchor="middle">fake, sqlite-file, sql, pocketbase</text>
+
+  <path class="edge" d="M380 396 V456"/>
+
+  <rect class="box contract" x="110" y="456" width="540" height="100"/>
+  <text class="t" x="380" y="497" text-anchor="middle">CustomerRepositoryFactory</text>
+  <text class="s" x="380" y="528" text-anchor="middle">Builds one ICustomerRepository implementation</text>
+
+  <path class="edge" d="M380 556 V612"/>
+
+  <rect class="box adapter" x="90" y="612" width="580" height="360"/>
+  <text class="t" x="380" y="655" text-anchor="middle">Concrete Adapter</text>
+  <text class="s" x="380" y="700" text-anchor="middle">fake -> FakeCustomerRepository</text>
+  <text class="s" x="380" y="756" text-anchor="middle">sqlite-file -> CustomerRepositorySQLite</text>
+  <text class="s" x="380" y="812" text-anchor="middle">sql -> CustomerRepositorySQL</text>
+  <text class="s" x="380" y="868" text-anchor="middle">pocketbase -> CustomerRepositoryPocketBase</text>
+  <text class="s" x="380" y="924" text-anchor="middle">unknown -> fake fallback with status message</text>
+
+  <path class="edge" d="M380 972 V1032"/>
+
+  <rect class="box start" x="110" y="1032" width="540" height="92"/>
+  <text class="t" x="380" y="1070" text-anchor="middle">ViewModels Receive Contract</text>
+  <text class="s" x="380" y="1100" text-anchor="middle">No Window rewrite when backend changes</text>
+</svg>

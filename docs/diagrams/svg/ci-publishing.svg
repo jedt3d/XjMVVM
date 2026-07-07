@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 1220" role="img" aria-labelledby="title desc">
+  <title id="title">CI and docs publishing flow</title>
+  <desc id="desc">A vertical flow showing branch changes, local checks, pull request CI, merge to main, GitHub Pages workflow, and live site verification.</desc>
+  <defs>
+    <style>
+      .bg{fill:#fbfaf7}.box{stroke:#1f2937;stroke-width:2.4;rx:14}.dev{fill:#dbeafe}.ci{fill:#dcfce7}.pub{fill:#fef3c7}.live{fill:#e0f2fe}.t{font-family:Inter,Arial,sans-serif;font-size:23px;font-weight:800;fill:#111827}.s{font-family:Inter,Arial,sans-serif;font-size:16px;fill:#374151}.edge{stroke:#374151;stroke-width:2.5;fill:none;marker-end:url(#arrow)}.label{font-family:Inter,Arial,sans-serif;font-size:15px;fill:#4b5563}
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#374151"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="760" height="1220"/>
+  <text class="t" x="380" y="58" text-anchor="middle">CI And Docs Publishing</text>
+  <text class="s" x="380" y="88" text-anchor="middle">The guide is built and deployed from the same repository.</text>
+
+  <rect class="box dev" x="110" y="126" width="540" height="96"/>
+  <text class="t" x="380" y="166" text-anchor="middle">Feature Branch</text>
+  <text class="s" x="380" y="195" text-anchor="middle">Docs, diagrams, source, or tests change</text>
+
+  <path class="edge" d="M380 222 V276"/>
+
+  <rect class="box dev" x="110" y="276" width="540" height="118"/>
+  <text class="t" x="380" y="316" text-anchor="middle">Local Validation</text>
+  <text class="s" x="380" y="347" text-anchor="middle">Build docs, scan Xojo text, run smokes</text>
+  <text class="s" x="380" y="374" text-anchor="middle">Open Xojo when source behavior changes</text>
+
+  <path class="edge" d="M380 394 V448"/>
+
+  <rect class="box ci" x="110" y="448" width="540" height="96"/>
+  <text class="t" x="380" y="488" text-anchor="middle">Pull Request</text>
+  <text class="s" x="380" y="517" text-anchor="middle">CI workflow validates the branch</text>
+
+  <path class="edge" d="M380 544 V598"/>
+
+  <rect class="box ci" x="110" y="598" width="540" height="118"/>
+  <text class="t" x="380" y="638" text-anchor="middle">Merge To Main</text>
+  <text class="s" x="380" y="669" text-anchor="middle">Only after CI is green</text>
+  <text class="s" x="380" y="696" text-anchor="middle">Main branch becomes publishing source</text>
+
+  <path class="edge" d="M380 716 V770"/>
+
+  <rect class="box pub" x="110" y="770" width="540" height="118"/>
+  <text class="t" x="380" y="810" text-anchor="middle">Docs Pages Workflow</text>
+  <text class="s" x="380" y="841" text-anchor="middle">Builds docs/site</text>
+  <text class="s" x="380" y="868" text-anchor="middle">Uploads and deploys GitHub Pages artifact</text>
+
+  <path class="edge" d="M380 888 V942"/>
+
+  <rect class="box live" x="110" y="942" width="540" height="96"/>
+  <text class="t" x="380" y="982" text-anchor="middle">Live Site</text>
+  <text class="s" x="380" y="1011" text-anchor="middle">https://jedt3d.github.io/XjMVVM/</text>
+
+  <path class="edge" d="M380 1038 V1092"/>
+
+  <rect class="box live" x="110" y="1092" width="540" height="96"/>
+  <text class="t" x="380" y="1132" text-anchor="middle">Verify Publication</text>
+  <text class="s" x="380" y="1161" text-anchor="middle">Check title, new chapters, and no stale pages</text>
+</svg>
