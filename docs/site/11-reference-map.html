@@ -102,6 +102,9 @@ blockquote{ margin:1.4em 0; padding:.2em 1.1em; border-left:3px solid var(--acce
 .snip-body{ overflow-x:auto; }
 pre.code{ margin:0; padding:12px 0; font-family:var(--mono); font-size:13.5px; line-height:1.62; background:var(--code-bg); color:#797978; }
 pre.code code{ display:block; }
+pre.code.fence{ margin:1.25em 0; padding:14px 16px; overflow-x:auto; border:1px solid var(--line); border-radius:12px;
+  box-shadow:0 1px 2px rgba(15,23,42,.04); }
+pre.code.fence code{ white-space:pre; }
 .code .cl{ display:block; white-space:pre; padding:0 16px 0 0; }
 .code .cl::before{ content:counter(ln); counter-increment:ln; display:inline-block;
   width:3.2ch; margin-right:16px; padding-right:10px; text-align:right; color:var(--gutter);
@@ -455,8 +458,7 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
 </ul>
 <h2>Extension Rule</h2>
 <p>When adding something new, ask one question first:</p>
-<pre><code class="language-text">Is this business behavior, backend behavior, composition behavior, or UI behavior?
-</code></pre>
+<pre class="code fence lang-text"><code>Is this business behavior, backend behavior, composition behavior, or UI behavior?</code></pre>
 <p>Put the code in the matching layer. That one question prevents most framework drift.</p>
 <h2>Pattern Glossary</h2>
 <table>

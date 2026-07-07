@@ -102,6 +102,9 @@ blockquote{ margin:1.4em 0; padding:.2em 1.1em; border-left:3px solid var(--acce
 .snip-body{ overflow-x:auto; }
 pre.code{ margin:0; padding:12px 0; font-family:var(--mono); font-size:13.5px; line-height:1.62; background:var(--code-bg); color:#797978; }
 pre.code code{ display:block; }
+pre.code.fence{ margin:1.25em 0; padding:14px 16px; overflow-x:auto; border:1px solid var(--line); border-radius:12px;
+  box-shadow:0 1px 2px rgba(15,23,42,.04); }
+pre.code.fence code{ white-space:pre; }
 .code .cl{ display:block; white-space:pre; padding:0 16px 0 0; }
 .code .cl::before{ content:counter(ln); counter-increment:ln; display:inline-block;
   width:3.2ch; margin-right:16px; padding-right:10px; text-align:right; color:var(--gutter);
@@ -309,7 +312,7 @@ body.reader .diagram svg g.node:hover > rect{ stroke:#1481b8 !important; stroke-
 <p>That is enough to exercise MVVM without drowning the developer in screens.</p>
 <h2>Code Structure</h2>
 <p>The feature is split by responsibility:</p>
-<pre><code class="language-text">CustomerDesk/
+<pre class="code fence lang-text"><code>CustomerDesk/
   Windows/
     CustomerListWindow
     CustomerEditWindow
@@ -324,24 +327,22 @@ XjMVVM framework/
   Core/ViewModels/CustomerDetailViewModel
   Composition/CustomerDesktopAppContext
   Backends/SQLite/CustomerRepositorySQLite
-  Backends/PocketBase/CustomerRepositoryPocketBase
-</code></pre>
+  Backends/PocketBase/CustomerRepositoryPocketBase</code></pre>
 <p>The app owns windows and user preferences. The framework owns the MVVM and backend contracts.</p>
 <h2>Opening The App</h2>
 <p>At startup, Customer Desk chooses the safest available backend.</p>
-<pre><code class="language-xojo">Sub AppOpening()
-  Var settings As CustomerBackendSettings
+<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> AppOpening()
+  <span class="hljs-keyword">Var</span> settings <span class="hljs-keyword">As</span> CustomerBackendSettings
 
-  If Preferences.UseServer And Preferences.LastToken &lt;&gt; &quot;&quot; Then
+  <span class="hljs-keyword">If</span> Preferences.UseServer <span class="hljs-keyword">And</span> Preferences.LastToken &lt;&gt; <span class="hljs-string">&quot;&quot;</span> <span class="hljs-keyword">Then</span>
     settings = CustomerBackendSettings.PocketBase(Preferences.ServerURL, Preferences.LastToken)
-  Else
-    Var dbFile As FolderItem = SpecialFolder.ApplicationData.Child(&quot;CustomerDesk&quot;).Child(&quot;customers.sqlite&quot;)
+  <span class="hljs-keyword">Else</span>
+    <span class="hljs-keyword">Var</span> dbFile <span class="hljs-keyword">As</span> <span class="hljs-type">FolderItem</span> = <span class="hljs-built_in">SpecialFolder</span>.ApplicationData.Child(<span class="hljs-string">&quot;CustomerDesk&quot;</span>).Child(<span class="hljs-string">&quot;customers.sqlite&quot;</span>)
     settings = CustomerBackendSettings.SQLiteFile(dbFile)
-  End If
+  <span class="hljs-keyword">End</span> <span class="hljs-keyword">If</span>
 
-  CustomerContext = New CustomerDesktopAppContext(settings)
-End Sub
-</code></pre>
+  CustomerContext = <span class="hljs-keyword">New</span> CustomerDesktopAppContext(settings)
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
 <p>What this teaches:</p>
 <ul>
 <li>Startup is where environment decisions belong.</li>
@@ -350,23 +351,22 @@ End Sub
 </ul>
 <h2>Search Customers</h2>
 <p>The list window owns the list control, but not the search algorithm.</p>
-<pre><code class="language-xojo">Sub SearchField_TextChanged()
-  ReloadPage(1)
-End Sub
+<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> SearchField_TextChanged()
+  ReloadPage(<span class="hljs-number">1</span>)
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span>
 
-Private Sub ReloadPage(pageNumber As Integer)
+<span class="hljs-keyword">Private</span> <span class="hljs-keyword">Sub</span> ReloadPage(pageNumber <span class="hljs-keyword">As</span> <span class="hljs-type">Integer</span>)
   mListVM.SearchTerm = SearchField.Text
-  mListVM.LoadPage(pageNumber, 50)
+  mListVM.LoadPage(pageNumber, <span class="hljs-number">50</span>)
 
   CustomerList.RemoveAllRows
-  For Each c As Customer In mListVM.Customers()
+  <span class="hljs-keyword">For</span> <span class="hljs-keyword">Each</span> c <span class="hljs-keyword">As</span> Customer <span class="hljs-keyword">In</span> mListVM.Customers()
     CustomerList.AddRow(c.FullName(), c.Email)
     CustomerList.RowTagAt(CustomerList.LastAddedRowIndex) = c.ID
-  Next
+  <span class="hljs-keyword">Next</span>
 
   StatusLabel.Text = mListVM.StatusMessage
-End Sub
-</code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
 <p>What this teaches:</p>
 <ul>
 <li>The Window still controls rendering.</li>
@@ -375,21 +375,20 @@ End Sub
 </ul>
 <h2>Edit Customer</h2>
 <p>The edit window converts controls into a model, then asks the ViewModel to save.</p>
-<pre><code class="language-xojo">Sub SaveButton_Pressed()
-  Var c As New Customer(FirstNameField.Text, LastNameField.Text, EmailField.Text)
+<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> SaveButton_Pressed()
+  <span class="hljs-keyword">Var</span> c <span class="hljs-keyword">As</span> <span class="hljs-keyword">New</span> Customer(FirstNameField.Text, LastNameField.Text, EmailField.Text)
   c.ID = mCustomerID
-  c.OwnerID = App.CurrentSession.UserID
+  c.OwnerID = <span class="hljs-built_in">App</span>.CurrentSession.UserID
   c.DateOfBirth = BirthDateField.Text
   c.Gender = GenderPopup.SelectedRowText
 
-  If Not mDetailVM.Save(c) Then
+  <span class="hljs-keyword">If</span> <span class="hljs-keyword">Not</span> mDetailVM.Save(c) <span class="hljs-keyword">Then</span>
     ErrorLabel.Text = mDetailVM.StatusMessage
-    Return
-  End If
+    <span class="hljs-keyword">Return</span>
+  <span class="hljs-keyword">End</span> <span class="hljs-keyword">If</span>
 
-  Self.Close()
-End Sub
-</code></pre>
+  <span class="hljs-built_in">Self</span>.Close()
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
 <p>What this teaches:</p>
 <ul>
 <li>Validation and persistence are not inside the button event.</li>
@@ -398,24 +397,23 @@ End Sub
 </ul>
 <h2>Login And Switch To PocketBase</h2>
 <p>PocketBase login creates a session token. After login, the app replaces the context.</p>
-<pre><code class="language-xojo">Sub LoginButton_Pressed()
-  Var transport As New PocketBaseURLConnectionTransport(30)
-  Var client As New PocketBaseClient(ServerURLField.Text, transport)
-  Var auth As New PocketBaseAuthService(client)
+<pre class="code fence lang-xojo"><code><span class="hljs-keyword">Sub</span> LoginButton_Pressed()
+  <span class="hljs-keyword">Var</span> transport <span class="hljs-keyword">As</span> <span class="hljs-keyword">New</span> PocketBaseURLConnectionTransport(<span class="hljs-number">30</span>)
+  <span class="hljs-keyword">Var</span> client <span class="hljs-keyword">As</span> <span class="hljs-keyword">New</span> PocketBaseClient(ServerURLField.Text, transport)
+  <span class="hljs-keyword">Var</span> auth <span class="hljs-keyword">As</span> <span class="hljs-keyword">New</span> PocketBaseAuthService(client)
 
-  Var session As PocketBaseAuthSession
+  <span class="hljs-keyword">Var</span> session <span class="hljs-keyword">As</span> PocketBaseAuthSession
   session = auth.AuthWithPassword(EmailField.Text, PasswordField.Text)
 
-  If Not session.IsAuthenticated() Then
+  <span class="hljs-keyword">If</span> <span class="hljs-keyword">Not</span> session.IsAuthenticated() <span class="hljs-keyword">Then</span>
     ErrorLabel.Text = auth.LastError().Message
-    Return
-  End If
+    <span class="hljs-keyword">Return</span>
+  <span class="hljs-keyword">End</span> <span class="hljs-keyword">If</span>
 
-  If App.CustomerContext &lt;&gt; Nil Then App.CustomerContext.Close()
-  App.CustomerContext = New CustomerDesktopAppContext( _
+  <span class="hljs-keyword">If</span> <span class="hljs-built_in">App</span>.CustomerContext &lt;&gt; <span class="hljs-literal">Nil</span> <span class="hljs-keyword">Then</span> <span class="hljs-built_in">App</span>.CustomerContext.Close()
+  <span class="hljs-built_in">App</span>.CustomerContext = <span class="hljs-keyword">New</span> CustomerDesktopAppContext( _
     CustomerBackendSettings.PocketBase(ServerURLField.Text, session.Token))
-End Sub
-</code></pre>
+<span class="hljs-keyword">End</span> <span class="hljs-keyword">Sub</span></code></pre>
 <p>What this teaches:</p>
 <ul>
 <li>Login is an app/session concern.</li>
@@ -435,8 +433,7 @@ End Sub
 <p>Do not hide sync inside <code>SaveButton_Pressed</code>.</p>
 <h2>Adding The Next Feature</h2>
 <p>For Orders, Invoices, Inventory, or Appointments, repeat the same vertical slice:</p>
-<pre><code class="language-text">Model -&gt; Validator -&gt; Repository interface -&gt; ViewModel -&gt; Fake repo -&gt; real backend adapters -&gt; composition -&gt; Window
-</code></pre>
+<pre class="code fence lang-text"><code>Model -&gt; Validator -&gt; Repository interface -&gt; ViewModel -&gt; Fake repo -&gt; real backend adapters -&gt; composition -&gt; Window</code></pre>
 <p>Build the first screen against a fake repository. Add SQLite or PocketBase after the ViewModel behavior is clear.</p>
 <h2>What The Example Proves</h2>
 <p>Customer Desk proves the core claim of XjMVVM:</p>

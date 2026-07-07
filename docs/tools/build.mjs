@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { marked } from "marked";
 import { renderSnippet } from "./snippet.mjs";
+import { highlightCode } from "./highlighting.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const meta = JSON.parse(readFileSync(`${ROOT}/book/meta.json`, "utf8"));
@@ -17,7 +18,13 @@ const CSS = readFileSync(`${ROOT}/assets/book.css`, "utf8");
 const READER_CSS = readFileSync(`${ROOT}/assets/reader.css`, "utf8");
 const JS = readFileSync(`${ROOT}/assets/viewer.js`, "utf8");
 const READER_JS = readFileSync(`${ROOT}/assets/reader.js`, "utf8");
-marked.setOptions({ mangle: false, headerIds: false });
+const renderer = new marked.Renderer();
+renderer.code = function code({ text, lang }) {
+  const info = String(lang || "").match(/^\S*/)?.[0] || "plaintext";
+  const { html, language } = highlightCode(String(text).replace(/\n$/, ""), info);
+  return `<pre class="code fence lang-${language}"><code>${html}</code></pre>\n`;
+};
+marked.setOptions({ mangle: false, headerIds: false, renderer });
 
 const ICONS = {
   zoomin: '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.6" y2="16.6"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>',
