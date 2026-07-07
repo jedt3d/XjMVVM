@@ -7,13 +7,13 @@ Protected Interface ICustomerRepository
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Delete(id As Integer)
+		Sub Delete(id As String)
 
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function FindByID(id As Integer) As Customer
+		Function FindByID(id As String) As Customer
 
 		End Function
 	#tag EndMethod

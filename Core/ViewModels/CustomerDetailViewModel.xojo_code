@@ -14,20 +14,20 @@ Protected Class CustomerDetailViewModel
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Load(id As Integer)
+		Sub Load(id As String)
 		  StatusMessage = ""
 		  mCustomer = Nil
-		  
+
 		  If mRepository = Nil Then
 		    StatusMessage = "No customer repository"
 		    Return
 		  End If
-		  
+
 		  mCustomer = mRepository.FindByID(id)
 		  If mCustomer = Nil Then
 		    StatusMessage = "Customer not found"
 		  Else
-		    StatusMessage = "Loaded customer " + mCustomer.ID.ToString
+		    StatusMessage = "Loaded customer " + mCustomer.ID
 		  End If
 		End Sub
 	#tag EndMethod
@@ -35,25 +35,25 @@ Protected Class CustomerDetailViewModel
 	#tag Method, Flags = &h0
 		Function Save(c As Customer) As Boolean
 		  StatusMessage = ""
-		  
+
 		  If mRepository = Nil Then
 		    StatusMessage = "No customer repository"
 		    Return False
 		  End If
-		  
+
 		  Var validation As ValidationResult = CustomerValidator.Validate(c)
 		  If Not validation.IsValid() Then
 		    StatusMessage = validation.Summary()
 		    Return False
 		  End If
-		  
+
 		  mCustomer = mRepository.Save(c)
 		  If mCustomer = Nil Then
 		    StatusMessage = "Customer save failed"
 		    Return False
 		  End If
-		  
-		  StatusMessage = "Saved customer " + mCustomer.ID.ToString
+
+		  StatusMessage = "Saved customer " + mCustomer.ID
 		  Return True
 		End Function
 	#tag EndMethod

@@ -1,66 +1,53 @@
 #tag Class
-Protected Class Customer
+Protected Class FakePocketBaseTransport
+Implements IPocketBaseTransport
 	#tag Method, Flags = &h0
-		Sub Constructor(firstName As String = "", lastName As String = "", email As String = "")
-		  Self.FirstName = firstName
-		  Self.LastName = lastName
-		  Self.Email = email
+		Sub Constructor()
+		  NextResponse = New PocketBaseResponse(200, "{}")
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Clone() As Customer
-		  Var copy As New Customer(FirstName, LastName, Email)
-		  copy.ID = ID
-		  copy.DateOfBirth = DateOfBirth
-		  copy.Gender = Gender
-		  Return copy
-		End Function
-	#tag EndMethod
+		Function Send(method As String, baseURL As String, path As String, body As String, authToken As String) As PocketBaseResponse
+		  LastMethod = method
+		  LastBaseURL = baseURL
+		  LastPath = path
+		  LastBody = body
+		  LastAuthToken = authToken
+		  SendCount = SendCount + 1
 
-	#tag Method, Flags = &h0
-		Function FullName() As String
-		  Var value As String = FirstName.Trim() + " " + LastName.Trim()
-		  Return value.Trim()
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function ToDictionary() As Dictionary
-		  Var d As New Dictionary()
-		  d.Value("id") = ID
-		  d.Value("first_name") = FirstName
-		  d.Value("last_name") = LastName
-		  d.Value("email") = Email
-		  d.Value("date_of_birth") = DateOfBirth
-		  d.Value("gender") = Gender
-		  Return d
+		  If NextResponse = Nil Then Return New PocketBaseResponse(204, "")
+		  Return NextResponse
 		End Function
 	#tag EndMethod
 
 
 	#tag Property, Flags = &h0
-		DateOfBirth As String
+		LastAuthToken As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		Email As String
+		LastBaseURL As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		FirstName As String
+		LastBody As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		Gender As String
+		LastMethod As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		ID As String
+		LastPath As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		LastName As String
+		NextResponse As PocketBaseResponse
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		SendCount As Integer
 	#tag EndProperty
 
 

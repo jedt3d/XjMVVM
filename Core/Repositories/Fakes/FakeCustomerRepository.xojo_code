@@ -11,19 +11,19 @@ Implements ICustomerRepository
 		Function Count(searchTerm As String) As Integer
 		  Var n As Integer = 0
 		  Var term As String = searchTerm.Trim().Lowercase()
-		  
+
 		  For Each c As Customer In mCustomers
 		    If MatchesSearch(c, term) Then n = n + 1
 		  Next
-		  
+
 		  Return n
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Delete(id As Integer)
+		Sub Delete(id As String)
 		  Var removeIndex As Integer = -1
-		  
+
 		  If mCustomers.LastIndex >= 0 Then
 		    For i As Integer = 0 To mCustomers.LastIndex
 		      If mCustomers(i).ID = id Then
@@ -32,17 +32,17 @@ Implements ICustomerRepository
 		      End If
 		    Next
 		  End If
-		  
+
 		  If removeIndex >= 0 Then mCustomers.RemoveAt(removeIndex)
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function FindByID(id As Integer) As Customer
+		Function FindByID(id As String) As Customer
 		  For Each c As Customer In mCustomers
 		    If c.ID = id Then Return c.Clone()
 		  Next
-		  
+
 		  Return Nil
 		End Function
 	#tag EndMethod
@@ -52,26 +52,26 @@ Implements ICustomerRepository
 		  Var results() As Customer
 		  If pageSize <= 0 Then Return results
 		  If pageNumber < 1 Then pageNumber = 1
-		  
+
 		  Var filtered() As Customer
 		  Var term As String = searchTerm.Trim().Lowercase()
-		  
+
 		  For Each c As Customer In mCustomers
 		    If MatchesSearch(c, term) Then filtered.Add(c.Clone())
 		  Next
-		  
+
 		  If filtered.LastIndex < 0 Then Return results
-		  
+
 		  Var offset As Integer = (pageNumber - 1) * pageSize
 		  If offset > filtered.LastIndex Then Return results
-		  
+
 		  Var endIndex As Integer = offset + pageSize - 1
 		  If endIndex > filtered.LastIndex Then endIndex = filtered.LastIndex
-		  
+
 		  For i As Integer = offset To endIndex
 		    results.Add(filtered(i).Clone())
 		  Next
-		  
+
 		  Return results
 		End Function
 	#tag EndMethod
@@ -80,7 +80,7 @@ Implements ICustomerRepository
 		Private Function MatchesSearch(c As Customer, term As String) As Boolean
 		  If term = "" Then Return True
 		  If c = Nil Then Return False
-		  
+
 		  Var haystack As String = c.FirstName + " " + c.LastName + " " + c.Email
 		  haystack = haystack.Lowercase()
 		  Return haystack.IndexOf(term) >= 0
@@ -90,16 +90,16 @@ Implements ICustomerRepository
 	#tag Method, Flags = &h0
 		Function Save(customer As Customer) As Customer
 		  If customer = Nil Then Return Nil
-		  
+
 		  Var saved As Customer = customer.Clone()
-		  
-		  If saved.ID <= 0 Then
-		    saved.ID = mNextID
+
+		  If saved.ID.Trim() = "" Then
+		    saved.ID = mNextID.ToString()
 		    mNextID = mNextID + 1
 		    mCustomers.Add(saved.Clone())
 		    Return saved
 		  End If
-		  
+
 		  If mCustomers.LastIndex >= 0 Then
 		    For i As Integer = 0 To mCustomers.LastIndex
 		      If mCustomers(i).ID = saved.ID Then
@@ -108,8 +108,7 @@ Implements ICustomerRepository
 		      End If
 		    Next
 		  End If
-		  
-		  If saved.ID >= mNextID Then mNextID = saved.ID + 1
+
 		  mCustomers.Add(saved.Clone())
 		  Return saved
 		End Function

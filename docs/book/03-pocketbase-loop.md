@@ -6,14 +6,14 @@ code.
 
 ## Adapter Boundary
 
-The Xojo side should provide a small REST adapter layer:
+The Xojo side now starts with a small REST adapter layer:
 
 - `PocketBaseClient`
-- `PocketBaseAuthProvider`
 - `PocketBaseRecordMapper`
 - `PocketBaseQuery`
-- `PocketBaseErrorMapper`
-- `PocketBaseRepositoryBase`
+- `PocketBaseResponse`
+- `IPocketBaseTransport`
+- `FakePocketBaseTransport`
 
 Domain repositories such as `CustomerRepositoryPocketBase` should sit on top of
 that adapter layer and satisfy the same interface as SQLite and direct database
@@ -34,3 +34,13 @@ The PocketBase loop is real only when it can prove:
 The first implementation should keep backend customization out of scope until
 this compatibility proof passes.
 
+## Current Cycle 2 Proof
+
+Cycle 2 adds `CustomerRepositoryPocketBase` behind `ICustomerRepository`.
+The proof is intentionally transport-injected, so request paths, JSON mapping,
+token forwarding, create/update/delete decisions, and ViewModel compatibility can
+be tested without requiring every developer machine to have a PocketBase process
+running.
+
+The next proof should add the concrete `URLConnection` transport and run it
+against a stock PocketBase executable with a real `customers` collection.
